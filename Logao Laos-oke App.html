@@ -1,0 +1,3759 @@
+<!DOCTYPE html>
+<html lang="lo" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logao Laos-oke - ແປພາສາລາວເປັນໂອເກະ (Developer Mode)</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Lao', 'Phetsarath OT', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts for Lao, Inter & Code Monospace -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Lao:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --glass-blur: 3px;
+            --glass-opacity-light: 0.25;
+            --glass-opacity-dark: 0.15;
+            --ui-scale: 1;
+            --anim-speed: 0.22s;
+            --pixel-pill-speed: 0.50s;
+            /* Google Pixel Material 3 Expressive Fluid Spring */
+            --pixel-ease: cubic-bezier(0.22, 1.12, 0.36, 1);
+            --pixel-spring: linear(
+                0, 0.006, 0.025, 0.056, 0.098, 0.151, 0.213, 0.282, 0.356, 0.434,
+                0.514, 0.593, 0.671, 0.745, 0.814, 0.876, 0.931, 0.977, 1.014, 1.042,
+                1.061, 1.071, 1.074, 1.071, 1.062, 1.051, 1.038, 1.025, 1.013, 1.003,
+                0.996, 0.992, 0.991, 0.992, 0.994, 0.997, 0.999, 1.001, 1.001, 1
+            );
+            --card-radius: 32px;
+        }
+
+        /* Smooth theme transition */
+        html.theme-transition,
+        html.theme-transition *,
+        html.theme-transition *:before,
+        html.theme-transition *:after {
+            transition: background-color var(--anim-speed) ease, border-color var(--anim-speed) ease, color var(--anim-speed) ease !important;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans Lao', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            zoom: var(--ui-scale);
+        }
+
+        /* Base Liquid Glass Body Containers */
+        .liquid-glass {
+            background: rgba(255, 255, 255, var(--glass-opacity-light));
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 16px 36px 0 rgba(31, 38, 135, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            transform: translateZ(0);
+        }
+
+        .dark .liquid-glass {
+            background: rgba(18, 20, 32, var(--glass-opacity-dark));
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            transform: translateZ(0);
+        }
+
+        .dynamic-card-radius {
+            border-radius: var(--card-radius);
+        }
+
+        /* Solid Crisp White Modal Glass for Light Mode */
+        .modal-solid-glass {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .dark .modal-solid-glass {
+            background: rgba(20, 24, 38, 0.95) !important;
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .liquid-pill {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            transition: background-color var(--anim-speed) ease, border-color var(--anim-speed) ease, transform 0.25s ease;
+        }
+
+        .dark .liquid-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        /* Google Pixel / iOS Liquid Glass Dock with Balanced 3D Perspective */
+        .ios-liquid-dock {
+            background: rgba(255, 255, 255, 0.52);
+            backdrop-filter: blur(var(--glass-blur)) saturate(210%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.78);
+            box-shadow: 
+                0 16px 32px -8px rgba(0, 0, 0, 0.1),
+                0 4px 12px -4px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1.5px rgba(255, 255, 255, 0.9);
+            perspective: 680px;
+            transform-style: preserve-3d;
+            touch-action: pan-y;
+        }
+
+        .dark .ios-liquid-dock {
+            background: rgba(18, 20, 32, 0.62);
+            backdrop-filter: blur(var(--glass-blur)) saturate(210%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 
+                0 16px 36px -5px rgba(0, 0, 0, 0.65),
+                0 8px 16px -5px rgba(0, 0, 0, 0.45),
+                inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        }
+
+        /* Floating Morphing Liquid Glass Pill Capsule (Silky Google Pixel Fluid Style) */
+        .ios-glass-capsule {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(238, 242, 255, 0.84) 100%);
+            backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 10px 24px -4px rgba(99, 102, 241, 0.25),
+                0 3px 8px rgba(0, 0, 0, 0.04),
+                inset 0 2px 3px rgba(255, 255, 255, 1),
+                inset 0 -1.5px 3px rgba(160, 170, 225, 0.22);
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: 0;
+            border-radius: 9999px;
+            pointer-events: none;
+            overflow: hidden;
+            transform-origin: center center;
+            transition:
+                transform var(--pixel-pill-speed) var(--pixel-ease),
+                width var(--pixel-pill-speed) var(--pixel-ease),
+                box-shadow 0.45s ease;
+            transition-timing-function: var(--pixel-spring), var(--pixel-spring), ease;
+            will-change: transform, width;
+        }
+
+        .dark .ios-glass-capsule {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.11) 100%);
+            backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+            border: 1.5px solid rgba(255, 255, 255, 0.36);
+            box-shadow: 
+                0 10px 24px -4px rgba(0, 0, 0, 0.58),
+                0 0 16px rgba(99, 102, 241, 0.32),
+                inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+                inset 0 -1.5px 3px rgba(0, 0, 0, 0.32);
+        }
+
+        /* Soft Droplet Pulse when Capsule Glides */
+        .ios-glass-capsule.pixel-pulse {
+            animation: pixelCapsuleDroplet var(--pixel-pill-speed) cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes pixelCapsuleDroplet {
+            0% {
+                filter: brightness(1);
+            }
+            35% {
+                filter: brightness(1.06);
+                box-shadow: 
+                    0 14px 28px -3px rgba(99, 102, 241, 0.34),
+                    0 4px 12px rgba(0, 0, 0, 0.06),
+                    inset 0 2px 4px rgba(255, 255, 255, 1);
+            }
+            100% {
+                filter: brightness(1);
+            }
+        }
+
+        /* Glass Surface Reflection Beam */
+        .ios-glass-capsule::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 40%,
+                rgba(255, 255, 255, 0.55) 48%,
+                rgba(255, 255, 255, 0.8) 50%,
+                rgba(255, 255, 255, 0.55) 52%,
+                transparent 60%
+            );
+            transform: rotate(25deg);
+            animation: glassShimmer 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glassShimmer {
+            0%, 75%, 100% { opacity: 0; transform: translateY(-30px) rotate(25deg); }
+            15% { opacity: 1; transform: translateY(30px) rotate(25deg); }
+        }
+
+        /* Sliding Segmented Capsule for Toggles (Abc/abc, Theme, Speed, Spacing) */
+        .segmented-3d-wrap {
+            perspective: 560px;
+            transform-style: preserve-3d;
+        }
+
+        .pixel-segmented-pill {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: 0;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            box-shadow: 0 5px 14px -2px rgba(79, 70, 229, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+            pointer-events: none;
+            z-index: 1;
+            transition:
+                transform calc(var(--pixel-pill-speed) * 0.92) var(--pixel-ease),
+                width calc(var(--pixel-pill-speed) * 0.92) var(--pixel-ease);
+            transition-timing-function: var(--pixel-spring), var(--pixel-spring);
+            will-change: transform, width;
+        }
+
+        /* Dynamic Capsule Option Switches with Balanced 3D Embossed Text */
+        .capsule-toggle-btn {
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition:
+                color 0.35s ease,
+                transform calc(var(--pixel-pill-speed) * 0.85) var(--pixel-ease),
+                text-shadow 0.35s ease;
+        }
+
+        .capsule-toggle-btn.seg-active {
+            transform: translate3d(0, -0.5px, 8px) scale(1.02) rotateX(4deg);
+            text-shadow: 0 2px 5px rgba(15, 23, 42, 0.38);
+        }
+
+        .capsule-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Navigation Buttons with Perfectly Proportioned 3D Embossed Typography & Icon */
+        .nav-btn {
+            position: relative;
+            z-index: 10;
+            transform-style: preserve-3d;
+            overflow: visible;
+            transition:
+                color 0.35s ease,
+                transform calc(var(--pixel-pill-speed) * 0.85) var(--pixel-ease);
+        }
+
+        .nav-btn i,
+        .nav-btn span {
+            display: inline-block;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            line-height: 1.2;
+            transition:
+                transform calc(var(--pixel-pill-speed) * 0.9) var(--pixel-ease),
+                text-shadow 0.35s ease,
+                filter 0.35s ease;
+            transition-timing-function: var(--pixel-spring), ease, ease;
+        }
+
+        .nav-btn.active {
+            color: #312e81; /* Indigo 900 */
+        }
+        .dark .nav-btn.active {
+            color: #ffffff;
+        }
+
+        /* Perfectly Sized 3D Embossed Relief */
+        .nav-btn.active span {
+            font-weight: 700;
+            transform: translate3d(0, -0.5px, 11px) scale(1.025) rotateX(5deg);
+            text-shadow:
+                0 1px 0 rgba(224, 231, 255, 0.95),
+                0 2px 0 rgba(165, 180, 252, 0.55),
+                0 4px 8px rgba(79, 70, 229, 0.28);
+            animation: pixel3dTextFloat 3.4s ease-in-out 0.35s infinite;
+        }
+
+        .dark .nav-btn.active span {
+            text-shadow:
+                0 1px 0 rgba(199, 210, 254, 0.35),
+                0 2px 0 rgba(99, 102, 241, 0.3),
+                0 4px 10px rgba(129, 140, 248, 0.5);
+        }
+
+        .nav-btn.active i {
+            transform: translate3d(0, -0.5px, 12px) scale(1.05) rotateX(5deg);
+            filter: drop-shadow(0 3px 6px rgba(79, 70, 229, 0.35));
+            animation: pixel3dIconFloat 3.4s ease-in-out 0.35s infinite;
+        }
+
+        .dark .nav-btn.active i {
+            filter: drop-shadow(0 4px 8px rgba(129, 140, 248, 0.52));
+        }
+
+        @keyframes pixel3dTextFloat {
+            0%, 100% {
+                transform: translate3d(0, -0.5px, 11px) scale(1.025) rotateX(5deg) rotateY(-1deg);
+            }
+            50% {
+                transform: translate3d(0, -1.5px, 14px) scale(1.035) rotateX(7deg) rotateY(1deg);
+            }
+        }
+
+        @keyframes pixel3dIconFloat {
+            0%, 100% {
+                transform: translate3d(0, -0.5px, 12px) scale(1.05) rotateX(5deg) rotateY(-1deg);
+            }
+            50% {
+                transform: translate3d(0, -1.5px, 15px) scale(1.065) rotateX(7deg) rotateY(1deg);
+            }
+        }
+
+        .nav-btn:active i,
+        .nav-btn:active span {
+            transform: translate3d(0, 0, 2px) scale(0.95);
+            animation: none;
+        }
+
+        /* Brand Logo Monogram & Wordmark Styling */
+        .brand-logo-badge {
+            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 52%, #ec4899 100%);
+            box-shadow: 0 6px 16px -3px rgba(99, 102, 241, 0.42), inset 0 1px 1.5px rgba(255, 255, 255, 0.55);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s var(--pixel-ease), box-shadow 0.25s ease;
+        }
+        .dark .brand-logo-badge {
+            box-shadow: 0 6px 18px -2px rgba(129, 140, 248, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.4);
+        }
+        .brand-logo-group:hover .brand-logo-badge {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.3);
+            border-radius: 9999px;
+        }
+
+        /* Interactive Micro-interactions */
+        .m3-btn {
+            transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.15s ease, background-color var(--anim-speed) ease;
+            will-change: transform;
+        }
+
+        @media (hover: hover) {
+            .m3-btn:hover {
+                opacity: 0.92;
+            }
+        }
+
+        .m3-btn:active {
+            transform: scale(0.94) !important;
+        }
+
+        /* Page Fade Animations */
+        .page-fade-in {
+            animation: fadeInSlide var(--anim-speed) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: opacity, transform;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Background Blobs */
+        @keyframes float-slow-1 {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(20px, -25px, 0) scale(1.08); }
+        }
+        @keyframes float-slow-2 {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-20px, 25px, 0) scale(1.08); }
+        }
+
+        .blob-1 { animation: float-slow-1 14s ease-in-out infinite; will-change: transform; }
+        .blob-2 { animation: float-slow-2 18s ease-in-out infinite; will-change: transform; }
+
+        /* Modal Smooth Transitions */
+        .modal-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--anim-speed) ease;
+        }
+
+        .modal-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            opacity: 0;
+            transform: scale(0.95) translateY(12px);
+            transition: opacity var(--anim-speed) ease, transform var(--anim-speed) cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-backdrop.active .modal-content {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Code Editor Line Numbers Sync */
+        .code-textarea {
+            tab-size: 4;
+            white-space: pre;
+            word-break: normal;
+        }
+
+        /* Allow text selection in inputs and outputs */
+        textarea, input, #output-container {
+            user-select: text;
+        }
+
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .blob-1, .blob-2, .page-fade-in, .m3-btn, .modal-backdrop, .modal-content, .ios-glass-capsule, .nav-btn.active span, .nav-btn.active i {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-[#070810] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden pb-32">
+
+    <!-- Ambient Background Blobs -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div class="blob-1 absolute top-5 left-5 w-[24rem] h-[24rem] bg-indigo-400/25 dark:bg-indigo-600/20 rounded-full blur-[70px]"></div>
+        <div class="blob-2 absolute top-1/3 -right-10 w-[22rem] h-[22rem] bg-purple-400/25 dark:bg-violet-600/20 rounded-full blur-[70px]"></div>
+        <div class="blob-1 absolute -bottom-10 left-1/3 w-[26rem] h-[26rem] bg-pink-400/20 dark:bg-cyan-600/20 rounded-full blur-[70px]"></div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="pt-4 pb-2 px-4 max-w-5xl w-full mx-auto flex items-center justify-between gap-2">
+        <div class="brand-logo-group flex items-center gap-2.5 cursor-pointer min-w-0" onclick="switchTab('translator')">
+            <!-- Custom Inline SVG Monogram ("Lo") -->
+            <div class="brand-logo-badge w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white" aria-label="Logao Laos-oke Monogram">
+                <svg viewBox="0 0 36 36" class="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="lo-monogram-sheen" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                            <stop offset="100%" stop-color="#e0e7ff" stop-opacity="0.92"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Geometric "L" stem + base -->
+                    <path d="M9.5 9.5V23.5C9.5 25.1569 10.8431 26.5 12.5 26.5H17.5" stroke="url(#lo-monogram-sheen)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Sleek "o" loop nestled beside L -->
+                    <circle cx="22.5" cy="21" r="4.8" stroke="url(#lo-monogram-sheen)" stroke-width="3"/>
+                    <!-- Accent spark dot -->
+                    <circle cx="23.5" cy="11.5" r="1.6" fill="#ffffff" fill-opacity="0.95"/>
+                </svg>
+            </div>
+            <div class="min-w-0">
+                <h1 class="text-sm sm:text-base leading-tight tracking-tight flex items-center gap-1.5 flex-wrap">
+                    <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
+                        <span class="font-extrabold text-slate-900 dark:text-white tracking-tight">Logao</span>
+                        <span class="font-semibold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">Laos-oke</span>
+                    </span>
+                    <span class="text-[9px] uppercase font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 dark:bg-indigo-400/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 dark:border-indigo-400/25 shrink-0" id="version-badge">v1.5 Dev</span>
+                </h1>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate" id="ui-subtitle">ແປພາສາລາວເປັນໂອເກະ</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+            <!-- Language Selector Button -->
+            <button onclick="openLangModal()" class="m3-btn text-xs liquid-pill text-slate-700 dark:text-slate-200 border-none rounded-full px-3.5 py-1.5 font-semibold flex items-center gap-1.5 focus:outline-none cursor-pointer shadow-sm">
+                <span id="current-lang-flag">🇱🇦</span>
+                <span id="current-lang-name">ລາວ</span>
+                <i class="fa-solid fa-chevron-down text-[10px] opacity-70 ml-0.5"></i>
+            </button>
+
+            <!-- Theme Toggle Button -->
+            <button onclick="toggleTheme()" class="m3-btn w-8 h-8 rounded-full flex items-center justify-center liquid-pill text-slate-700 dark:text-slate-200" title="ປ່ຽນທີມ / Change Theme">
+                <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+        
+        <!-- PAGE 1: TRANSLATOR (Main View) -->
+        <div id="page-translator" class="space-y-4 sm:space-y-6 page-fade-in">
+            <!-- Translation Panel Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                
+                <!-- INPUT PANEL -->
+                <div class="liquid-glass dynamic-card-radius p-4 sm:p-6 flex flex-col justify-between shadow-xl">
+                    <div>
+                        <!-- Input Header -->
+                        <div class="flex items-center justify-between mb-2 sm:mb-3 text-slate-600 dark:text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block shadow-sm shadow-indigo-500"></span>
+                                <span class="text-xs font-semibold uppercase tracking-wider" id="lbl-input-lang">ພາສາລາວ (LAO SCRIPT)</span>
+                            </div>
+                            <span id="char-count" class="text-xs text-slate-400 font-mono">0 ຕົວອັກສອນ</span>
+                        </div>
+
+                        <!-- Textarea -->
+                        <textarea 
+                            id="input-text" 
+                            rows="4" 
+                            class="w-full bg-transparent text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none resize-none text-base sm:text-lg leading-relaxed custom-scrollbar font-sans"
+                            placeholder="ປ້ອນຂໍ້ຄວາມພາສາລາວຢູ່ທີ່ນີ້..."
+                            oninput="onInputTextChange()"
+                        ></textarea>
+                    </div>
+
+                    <!-- Input Actions -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200/80 dark:border-slate-800/80 mt-3">
+                        <div class="flex items-center gap-2">
+                            <button onclick="pasteInput()" class="m3-btn text-xs px-4 py-2 rounded-full liquid-pill text-slate-700 dark:text-slate-200 font-medium flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-regular fa-clipboard"></i>
+                                <span id="btn-paste">ວາງ</span>
+                            </button>
+                            <button onclick="clearInput()" class="m3-btn text-xs px-4 py-2 rounded-full bg-red-500/10 text-red-500 dark:text-red-400 font-medium flex items-center gap-1.5 hover:bg-red-500/20">
+                                <i class="fa-regular fa-trash-can"></i>
+                                <span id="btn-clear">ລຶບ</span>
+                            </button>
+                        </div>
+
+                        <button onclick="speakText('input')" class="m3-btn w-9 h-9 rounded-full flex items-center justify-center liquid-pill text-slate-600 dark:text-slate-300 shadow-sm" title="ຟັງສຽງອ່ານ">
+                            <i class="fa-solid fa-volume-high text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OUTPUT PANEL -->
+                <div class="liquid-glass dynamic-card-radius p-5 sm:p-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div>
+                        <!-- Output Header -->
+                        <div class="flex items-center justify-between mb-3 text-indigo-600 dark:text-indigo-400">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-sm shadow-emerald-500"></span>
+                                <span class="text-xs font-semibold uppercase tracking-wider" id="lbl-output-lang">ພາສາໂອເກະ (O-GAE PHONETICS)</span>
+                            </div>
+                            
+                            <!-- Floating Capsule Phonetic Style Toggle -->
+                            <div id="style-seg-container" class="segmented-3d-wrap flex items-center p-1 rounded-full liquid-pill border border-slate-200/80 dark:border-white/10 relative">
+                                <div id="style-seg-pill" class="pixel-segmented-pill"></div>
+                                <button onclick="setStyleOption('capitalize')" id="opt-cap" class="capsule-toggle-btn text-[11px] px-3 py-1 rounded-full font-semibold text-white">Abc</button>
+                                <button onclick="setStyleOption('lowercase')" id="opt-low" class="capsule-toggle-btn text-[11px] px-3 py-1 rounded-full font-semibold text-slate-500 dark:text-slate-400">abc</button>
+                            </div>
+                        </div>
+
+                        <!-- Output Box -->
+                        <div id="output-container" class="w-full min-h-[140px] text-indigo-950 dark:text-indigo-100 text-base sm:text-lg font-semibold leading-relaxed break-words whitespace-pre-wrap font-sans selection:bg-indigo-200 dark:selection:bg-indigo-800">
+                            <span class="text-slate-400 dark:text-slate-500 font-normal text-sm italic" id="output-placeholder">ຜົນລັບພາສາໂອເກະຈະສະແດງຢູ່ທີ່ນີ້...</span>
+                        </div>
+                    </div>
+
+                    <!-- Output Actions -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200/80 dark:border-slate-800/80 mt-3">
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleFavoriteCurrent()" id="btn-fav" class="m3-btn text-xs px-4 py-2 rounded-full liquid-pill text-slate-500 dark:text-slate-300 font-medium flex items-center gap-1.5 shadow-sm">
+                                <i id="btn-fav-icon" class="fa-regular fa-star text-xs"></i>
+                                <span id="lbl-fav">ມັກ</span>
+                            </button>
+                            <button onclick="speakText('output')" class="m3-btn w-9 h-9 rounded-full flex items-center justify-center liquid-pill text-slate-600 dark:text-slate-300 shadow-sm" title="ຟັງສຽງໂອເກະ">
+                                <i class="fa-solid fa-volume-low text-xs"></i>
+                            </button>
+                        </div>
+
+                        <button onclick="copyOutput()" class="m3-btn px-5 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/25">
+                            <i class="fa-regular fa-copy"></i>
+                            <span id="btn-copy">ຄັດລອກ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Examples Capsules -->
+            <div id="examples-container" class="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar text-xs">
+                <span class="text-slate-400 whitespace-nowrap font-medium flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i> <span id="lbl-examples">ຕົວຢ່າງ:</span>
+                </span>
+                <button data-example="ມື້ນີ້ໄປເລ່ນສວນສະໜຸກ" class="px-4 py-1.5 rounded-full liquid-glass text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap transition-all shadow-sm font-semibold m3-btn">
+                    ມື້ນີ້ໄປເລ່ນສວນສະໜຸກ
+                </button>
+                <button data-example="ສະບາຍດີ" class="px-4 py-1.5 rounded-full liquid-glass text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap transition-all shadow-sm m3-btn">
+                    ສະບາຍດີ (Sabaidee)
+                </button>
+                <button data-example="ຂອບໃຈຫຼາຍໆ" class="px-4 py-1.5 rounded-full liquid-glass text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap transition-all shadow-sm m3-btn">
+                    ຂອບໃຈຫຼາຍໆ (Khop Chai Lai Lai)
+                </button>
+                <button data-example="ຮັກເຈົ້າ" class="px-4 py-1.5 rounded-full liquid-glass text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap transition-all shadow-sm m3-btn">
+                    ຮັກເຈົ້າ (Hak Chao)
+                </button>
+                <button data-example="ຢູ່ດີມີແຮງ" class="px-4 py-1.5 rounded-full liquid-glass text-slate-700 dark:text-slate-300 hover:border-indigo-500 whitespace-nowrap transition-all shadow-sm m3-btn">
+                    ຢູ່ດີມີແຮງ (Yu Dee Mee Haeng)
+                </button>
+            </div>
+
+            <!-- Safety & Privacy Banner -->
+            <div class="flex justify-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl sm:rounded-full liquid-glass text-[11px] font-semibold text-slate-700 dark:text-slate-200 border border-emerald-500/30 shadow-sm text-center leading-relaxed">
+                    <span class="relative flex h-2 w-2 shrink-0">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span id="alert-banner-txt">ນະໂຍບາຍແລະຄວາມປອດໄພຂອງຜູ້ໃຊ້ງານທາງເວັບຈະບໍ່ມີການຂໍຂໍ້ມູນສ່ວນຕົວໃດໆທັງນັ້ນ ຫຼື ຮຽກເກັບເງິນໃນບັນຊີຂອງທ່ານ (ທ່ານສາມາດບໍລິຈາກຄ່າກາເຟໃຫ້ໄດ້ ເລກບັນຊີໃນການຕັ້ງຄ່າ 🙏🏻 ພົບບັນຫາຕິດຕໍ່ WhatsApp: 2091415737 | Email: alex889100@gmail.com)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: HISTORY -->
+        <div id="page-history" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i>
+                    <span id="lbl-page-history-title">ປະຫວັດການແປ</span>
+                </h2>
+                <button onclick="switchTab('translator')" class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1" id="btn-back-trans-1">
+                    <i class="fa-solid fa-arrow-left text-xs"></i> <span>ກັບໜ້າແປພາສາ</span>
+                </button>
+            </div>
+            <div class="liquid-glass dynamic-card-radius p-5 sm:p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <span class="text-xs text-slate-400" id="lbl-history-desc">ລາຍການແປລ່າສຸດທີ່ບັນທຶກໄວ້ໃນເຄື່ອງ</span>
+                    <button onclick="clearHistory()" class="text-xs text-red-500 hover:underline flex items-center gap-1">
+                        <i class="fa-solid fa-trash"></i> <span id="btn-clear-history">ລຶບປະຫວັດທັງໝົດ</span>
+                    </button>
+                </div>
+                <div id="history-list" class="space-y-2.5 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
+                    <!-- History items rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: FAVORITES -->
+        <div id="page-favorites" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-500"></i>
+                    <span id="lbl-page-fav-title">ລາຍການໂປຼດ</span>
+                </h2>
+                <button onclick="switchTab('translator')" class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1" id="btn-back-trans-2">
+                    <i class="fa-solid fa-arrow-left text-xs"></i> <span>ກັບໜ້າແປພາສາ</span>
+                </button>
+            </div>
+            <div class="liquid-glass dynamic-card-radius p-5 sm:p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <span class="text-xs text-slate-400" id="lbl-fav-desc">ຂໍ້ຄວາມທີ່ຕິດດາວໄວ້ເພື່ອເບິ່ງຄືນ</span>
+                </div>
+                <div id="favorites-list" class="space-y-2.5 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
+                    <!-- Favorites items rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: PHONETIC GUIDE -->
+        <div id="page-guide" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-book text-emerald-500"></i>
+                    <span id="lbl-page-guide-title">ຄູ່ມືການຖອດສຽງ</span>
+                </h2>
+                <button onclick="switchTab('translator')" class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1" id="btn-back-trans-3">
+                    <i class="fa-solid fa-arrow-left text-xs"></i> <span>ກັບໜ້າແປພາສາ</span>
+                </button>
+            </div>
+            <div class="liquid-glass dynamic-card-radius p-5 sm:p-6 shadow-xl space-y-4 text-xs text-slate-600 dark:text-slate-300">
+                <p class="leading-relaxed font-medium" id="lbl-guide-heading">ຫຼັກເກນການຖອດພະຍັນຊະນະ ແລະ ສະຫຼະພາສາລາວເປັນຕົວອັກສອນໂຣມັນ (Logao Laos-oke Romanization Standard):</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono">
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ກ</span> k / g
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ຂ, ຄ</span> kh
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ງ</span> ng
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ຈ</span> ch
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ສ, ຊ</span> s
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ຍ, ຢ</span> y
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ດ, ຕ</span> d / t
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ບ, ປ</span> b / p
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ຜ, ພ</span> ph
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ຝ, ຟ</span> f
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ມ, ໝ</span> m
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ນ, ໜ</span> n
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ລ, ຫຼ</span> l
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ວ</span> v / w
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ຫ, ຮ</span> h
+                    </div>
+                    <div class="p-3 rounded-2xl liquid-pill">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold block">ເ-ົາ / -ຳ</span> ao / am
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Optimized Compact Dynamic Bottom Dock Navigation -->
+    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 px-3 w-full max-w-sm">
+        <div id="nav-dock-container" class="relative ios-liquid-dock rounded-full p-1 flex items-center justify-between min-h-[48px] transition-all">
+            
+            <!-- Floating Morphing Liquid Glass Pill Capsule -->
+            <div id="nav-active-pill" class="ios-glass-capsule"></div>
+
+            <button onclick="switchTab('translator')" id="nav-btn-translator" class="nav-btn flex-1 py-1.5 px-2 text-center text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5 active">
+                <i class="fa-solid fa-language text-sm"></i>
+                <span id="tab-title-translator" class="text-[11px]">ແປພາສາ</span>
+            </button>
+
+            <button onclick="switchTab('history')" id="nav-btn-history" class="nav-btn flex-1 py-1.5 px-2 text-center text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-clock-rotate-left text-xs"></i>
+                <span id="tab-title-history" class="text-[11px]">ປະຫວັດ</span>
+            </button>
+
+            <button onclick="switchTab('favorites')" id="nav-btn-favorites" class="nav-btn flex-1 py-1.5 px-2 text-center text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-star text-xs"></i>
+                <span id="tab-title-favorites" class="text-[11px]">ໂປຼດ</span>
+            </button>
+
+            <button onclick="switchTab('guide')" id="nav-btn-guide" class="nav-btn flex-1 py-1.5 px-2 text-center text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-book text-xs"></i>
+                <span id="tab-title-guide" class="text-[11px]">ຄູ່ມື</span>
+            </button>
+
+            <button onclick="openSettings()" id="nav-btn-settings" class="nav-btn w-8 h-8 shrink-0 rounded-full text-slate-700 dark:text-slate-200 flex items-center justify-center m3-btn" title="Settings">
+                <i class="fa-solid fa-sliders text-xs"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-slate-950/80 backdrop-blur-md modal-backdrop" onclick="if(event.target === this) closeSettings()">
+        <div class="modal-solid-glass rounded-[32px] max-w-md w-full max-h-[85vh] flex flex-col p-5 sm:p-6 shadow-2xl border modal-content">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-slate-800 shrink-0">
+                <h3 class="font-bold text-base flex items-center gap-2 text-slate-900 dark:text-white" id="modal-title-settings">
+                    <i class="fa-solid fa-gear text-indigo-500"></i> ຕັ້ງຄ່າລະບົບ
+                </h3>
+                <button onclick="closeSettings()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar py-3 space-y-4 text-sm pr-1">
+                
+                <!-- DEVELOPER MODE ENTRY ITEM -->
+                <div class="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-500/20 border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-between shadow-sm cursor-pointer hover:bg-indigo-100 dark:hover:bg-indigo-500/30 transition-all" onclick="openDevMode()">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-md">
+                            <i class="fa-solid fa-terminal text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 dark:text-white text-xs flex items-center gap-1.5">
+                                <span>ໂໝດນັກພັດທະນາ</span>
+                                <span class="text-[9px] bg-indigo-600 text-white px-2 py-0.5 rounded-full font-mono">Dev Options</span>
+                            </p>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400">ແກ້ໄຂ Visual, Code Editor, Sandbox & System Inspector</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-indigo-500"></i>
+                </div>
+
+                <!-- Theme Option -->
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-semibold text-slate-800 dark:text-slate-200" id="setting-theme-lbl">ທີມສະແດງຜົນ</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="setting-theme-desc">ປັບປ່ຽນສີໜ້າຈໍແອັບ</p>
+                    </div>
+                    <div id="theme-seg-container" class="segmented-3d-wrap flex items-center p-1 rounded-full liquid-pill border border-slate-200/80 dark:border-white/10 relative">
+                        <div id="theme-seg-pill" class="pixel-segmented-pill"></div>
+                        <button onclick="applyTheme('light')" id="theme-btn-light" class="capsule-toggle-btn text-[11px] px-2.5 py-1 rounded-full font-semibold">☀️ Light</button>
+                        <button onclick="applyTheme('dark')" id="theme-btn-dark" class="capsule-toggle-btn text-[11px] px-2.5 py-1 rounded-full font-semibold">🌙 Dark</button>
+                        <button onclick="applyTheme('system')" id="theme-btn-system" class="capsule-toggle-btn text-[11px] px-2.5 py-1 rounded-full font-semibold">📱 Auto</button>
+                    </div>
+                </div>
+
+                <!-- CUSTOM ANIMATION SPEED SELECTOR & DRAGGABLE SLIDER -->
+                <div class="space-y-2 pt-2 border-t border-slate-200/80 dark:border-slate-800/80">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800 dark:text-slate-200" id="setting-anim-lbl">ຄວາມໄວແອນິເມຊັນ (Animation)</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400" id="setting-anim-desc">ປັບປ່ຽນຄວາມໄວແອັບຕາມໃຈຊອບ</p>
+                        </div>
+                        <div id="anim-seg-container" class="segmented-3d-wrap flex items-center p-1 rounded-full liquid-pill border border-slate-200/80 dark:border-white/10 relative">
+                            <div id="anim-seg-pill" class="pixel-segmented-pill"></div>
+                            <button onclick="applyAnimationSpeed('fast')" id="anim-btn-fast" class="capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold">ໄວ</button>
+                            <button onclick="applyAnimationSpeed('normal')" id="anim-btn-normal" class="capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold">ປົກກະຕິ</button>
+                            <button onclick="applyAnimationSpeed('slow')" id="anim-btn-slow" class="capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold">ນຸ້ມນວນ</button>
+                        </div>
+                    </div>
+                    <!-- Draggable Animation Speed Slider -->
+                    <div class="flex items-center gap-2.5 pt-0.5">
+                        <i class="fa-solid fa-gauge-high text-[11px] text-indigo-500"></i>
+                        <input 
+                            type="range" 
+                            min="0.25" 
+                            max="1.50" 
+                            step="0.05" 
+                            value="0.50"
+                            id="anim-speed-range"
+                            oninput="onAnimSpeedSliderChange(this.value)"
+                            class="flex-1 accent-indigo-600 cursor-pointer"
+                        >
+                        <span id="anim-val-txt" class="text-[11px] font-mono font-bold text-indigo-600 dark:text-indigo-400 w-10 text-right">0.50s</span>
+                    </div>
+                </div>
+
+                <!-- Glass Blur Option -->
+                <div class="space-y-1.5 pt-2 border-t border-slate-200/80 dark:border-slate-800/80">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800 dark:text-slate-200" id="setting-blur-lbl">ຄວາມເບຼີກະຈົກ (Glass Blur)</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400" id="setting-blur-desc">ປັບຄວາມເບຼີແບບ Liquid Glass</p>
+                        </div>
+                        <span id="blur-val-txt" class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">3px</span>
+                    </div>
+                    <input 
+                        type="range" 
+                        min="0" 
+                        max="40" 
+                        step="1" 
+                        value="3"
+                        id="glass-blur-range"
+                        oninput="onGlassBlurChange(this.value)"
+                        class="w-full accent-indigo-600 cursor-pointer"
+                    >
+                </div>
+
+                <!-- Glass Opacity Option -->
+                <div class="space-y-1.5 pt-2 border-t border-slate-200/80 dark:border-slate-800/80">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800 dark:text-slate-200" id="setting-opacity-lbl">ຄວາມໂປ່ງໃສຂອງກະຈົກ (Opacity)</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400" id="setting-opacity-desc">ປັບຄວາມໂປ່ງໃສໃຫ້ເຫັນພື້ນຫຼັງ</p>
+                        </div>
+                        <span id="opacity-val-txt" class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">25%</span>
+                    </div>
+                    <input 
+                        type="range" 
+                        min="10" 
+                        max="90" 
+                        step="5" 
+                        id="glass-opacity-range"
+                        oninput="onGlassOpacityChange(this.value)"
+                        class="w-full accent-indigo-600 cursor-pointer"
+                    >
+                </div>
+
+                <!-- Word Spacing Option -->
+                <div class="flex items-center justify-between pt-2 border-t border-slate-200/80 dark:border-slate-800/80">
+                    <div>
+                        <p class="font-semibold text-slate-800 dark:text-slate-200" id="setting-space-lbl">ຮູບແບບການເວັ້ນພະຍາງ</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="setting-space-desc">ການໃສ່ຊ່ອງຫວ່າງລະຫວ່າງພະຍາງ</p>
+                    </div>
+                    <div id="spc-seg-container" class="segmented-3d-wrap flex items-center p-1 rounded-full liquid-pill border border-slate-200/80 dark:border-white/10 relative">
+                        <div id="spc-seg-pill" class="pixel-segmented-pill"></div>
+                        <button onclick="applySpacingSetting('space')" id="spc-btn-space" class="capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold">Space</button>
+                        <button onclick="applySpacingSetting('hyphen')" id="spc-btn-hyphen" class="capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold">-</button>
+                        <button onclick="applySpacingSetting('join')" id="spc-btn-join" class="capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold">Join</button>
+                    </div>
+                </div>
+
+                <!-- Privacy Policy Box -->
+                <div class="p-3.5 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/25 text-xs space-y-1">
+                    <p class="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5" id="lbl-privacy-title">
+                        <i class="fa-solid fa-shield-halved"></i> ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ (Privacy Policy)
+                    </p>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-[11px]" id="lbl-privacy-desc">
+                        ເວັບໄຊນີ້ບໍ່ມີການເກັບຮັກສາ ຫຼື ຮ້ອງຂໍຂໍ້ມູນສ່ວນຕົວໃດໆ ຂອງຜູ້ໃຊ້ງານຢ່າງເດັດຂາດ (No Personal Data Collected).
+                    </p>
+                </div>
+
+                <!-- Donate Box -->
+                <div class="p-3.5 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/25 text-xs space-y-2">
+                    <div class="flex items-center justify-between">
+                        <p class="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5" id="lbl-donate-title">
+                            <i class="fa-solid fa-heart text-red-500"></i> ສະໜັບສະໜູນຜູ້ພັດທະນາ (Donate)
+                        </p>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300" id="lbl-donate-bank">BCEL</span>
+                    </div>
+                    <div class="liquid-pill p-2.5 rounded-xl space-y-1 border border-amber-500/20 bg-white/70 dark:bg-white/10">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-slate-600 dark:text-slate-400" id="lbl-donate-name-title">ຊື່ບັນຊີ:</span>
+                            <span class="font-bold text-slate-900 dark:text-slate-100 font-mono">ALEX XAYYASENG</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 dark:border-slate-800/60">
+                            <span class="text-[11px] text-slate-600 dark:text-slate-400" id="lbl-donate-acc-title">ເລກບັນຊີ:</span>
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono tracking-wider text-xs">0451251538943</span>
+                        </div>
+                    </div>
+                    <button onclick="copyDonateAccount()" class="w-full m3-btn py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/20">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="btn-copy-acc">ຄັດລອກເລກບັນຊີ</span>
+                    </button>
+                </div>
+
+                <!-- Contact Support Box with Location Address -->
+                <div class="p-3.5 rounded-2xl liquid-pill bg-white/60 dark:bg-white/5 text-xs space-y-2 border border-white/60 dark:border-white/10">
+                    <p class="font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-1.5" id="lbl-contact-title">
+                        <i class="fa-solid fa-headset"></i> ຕິດຕໍ່ທີມງານ & ແຈ້ງບັນຫາ (Contact Support)
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="https://wa.me/8562091415737" target="_blank" class="m3-btn px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5 hover:bg-emerald-500/25">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp: 2091415737
+                        </a>
+                        <a href="mailto:alex889100@gmail.com" class="m3-btn px-3 py-1.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 font-semibold flex items-center gap-1.5 hover:bg-indigo-500/25">
+                            <i class="fa-regular fa-envelope text-sm"></i> alex889100@gmail.com
+                        </a>
+                    </div>
+
+                    <div class="p-2.5 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/20 flex items-start gap-2 text-[11px] text-slate-700 dark:text-slate-300">
+                        <i class="fa-solid fa-location-dot text-indigo-500 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-indigo-700 dark:text-indigo-400" id="lbl-address-title">ທີ່ຢູ່:</span>
+                            <span id="lbl-address-desc">ແຂວງຈຳປາສັກ, ເມືອງປະທຸມພອນ, ບ້ານບັງລຽງ</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                        <span id="lbl-app-version">ເວີຊັນ: 1.5 Dev</span>
+                        <span id="lbl-app-updated">ອັບເດດລ່າສຸດ: 12/11/2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-200/80 dark:border-slate-800 shrink-0 flex justify-end">
+                <button onclick="closeSettings()" class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold text-xs shadow-lg shadow-indigo-500/30 m3-btn" id="btn-modal-ok">
+                    ຕົກລົງ / OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LANGUAGE MODAL -->
+    <div id="lang-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-slate-950/80 backdrop-blur-md modal-backdrop" onclick="if(event.target === this) closeLangModal()">
+        <div class="liquid-glass rounded-[32px] max-w-sm w-full p-5 shadow-2xl space-y-4 border border-white/90 dark:border-white/20 modal-content">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800">
+                <h3 class="font-bold text-base flex items-center gap-2 text-slate-900 dark:text-white" id="modal-lang-title">
+                    <i class="fa-solid fa-globe text-indigo-500"></i> ເລືອກພາສາ / Select Language
+                </h3>
+                <button onclick="closeLangModal()" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            <div class="space-y-1.5 max-h-72 overflow-y-auto custom-scrollbar pr-1" id="lang-option-list"></div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN DEVELOPER MODE CONTAINER -->
+    <div id="dev-mode-modal" class="fixed inset-0 z-50 bg-slate-950 text-slate-100 flex flex-col hidden page-fade-in overflow-hidden font-sans">
+        
+        <!-- Dev Mode Header Bar -->
+        <header class="bg-slate-900/90 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+                <button onclick="closeDevMode()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center m3-btn" title="ກັບໄປການຕັ້ງຄ່າ">
+                    <i class="fa-solid fa-arrow-left text-sm"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-xs font-mono">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold leading-none text-white flex items-center gap-2">
+                            <span>ໂໝດນັກພັດທະນາ</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono border border-emerald-500/30">Sandbox Safe</span>
+                        </h2>
+                        <p class="text-[10px] text-slate-400 font-mono">Lao O-Gae Developer Engine & Private Inspector</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Quick Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="refreshDevPreview()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 m3-btn">
+                    <i class="fa-solid fa-rotate-right text-xs"></i>
+                    <span class="hidden sm:inline">ຣີເຟຣຊ Live View</span>
+                </button>
+                <button onclick="applyDevDraft()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-600/30 m3-btn">
+                    <i class="fa-solid fa-play text-xs"></i>
+                    <span>ນໍາໃຊ້ Draft</span>
+                </button>
+                <button onclick="exportDevHTML()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 m3-btn">
+                    <i class="fa-solid fa-download text-xs"></i>
+                    <span class="hidden sm:inline">ສົ່ງອອກ HTML</span>
+                </button>
+                <button onclick="closeDevMode()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-400 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dev Workspace Split Grid -->
+        <div class="flex-1 flex flex-col md:flex-row overflow-hidden bg-slate-950">
+            
+            <!-- LEFT PANEL: Dev Menu Tabs & Controls -->
+            <div class="w-full md:w-80 border-r border-slate-800 bg-slate-900/60 flex flex-col shrink-0 overflow-y-auto custom-scrollbar max-h-[45vh] md:max-h-none">
+                
+                <!-- Dev Navigation Selector -->
+                <div class="p-3 border-b border-slate-800 grid grid-cols-4 gap-1 text-[11px] font-semibold bg-slate-900/80 shrink-0">
+                    <button onclick="switchDevTab('visual')" id="dev-tab-visual" class="py-2 rounded-lg bg-indigo-600 text-white text-center font-bold flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-object-group text-xs"></i>
+                        <span>Visual</span>
+                    </button>
+                    <button onclick="switchDevTab('code')" id="dev-tab-code" class="py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 text-center font-bold flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-code text-xs"></i>
+                        <span>Code</span>
+                    </button>
+                    <button onclick="switchDevTab('settings')" id="dev-tab-settings" class="py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 text-center font-bold flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-sliders text-xs"></i>
+                        <span>Tweak</span>
+                    </button>
+                    <button onclick="switchDevTab('inspector')" id="dev-tab-inspector" class="py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 text-center font-bold flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-bug text-xs"></i>
+                        <span>Inspect</span>
+                    </button>
+                </div>
+
+                <!-- SUB-PANEL 1: VISUAL EDITOR PROPERTIES -->
+                <div id="dev-sub-visual" class="p-4 space-y-4 text-xs">
+                    <div class="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 space-y-1">
+                        <p class="font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-mouse-pointer text-xs"></i> ລະບົບ Visual Editor
+                        </p>
+                        <p class="text-[11px] text-slate-400">ກົດເລືອກ Element ໃນ Live Preview ດ້ານຂວາເພື່ອປັບ CSS ແບບ Real-time</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-[11px] text-slate-400 font-bold block mb-1">Target Element ID / Selector</label>
+                            <input type="text" id="dev-vis-target" readonly class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono text-xs" value="body">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Width (px/%/rem)</label>
+                                <input type="text" id="dev-vis-width" oninput="applyVisualProperty('width', this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" placeholder="auto">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Height (px/%/rem)</label>
+                                <input type="text" id="dev-vis-height" oninput="applyVisualProperty('height', this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" placeholder="auto">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Padding (px)</label>
+                                <input type="text" id="dev-vis-padding" oninput="applyVisualProperty('padding', this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" placeholder="16px">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Margin (px)</label>
+                                <input type="text" id="dev-vis-margin" oninput="applyVisualProperty('margin', this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" placeholder="0px">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Text Color</label>
+                                <div class="flex items-center gap-1.5">
+                                    <input type="color" id="dev-vis-color-picker" oninput="document.getElementById('dev-vis-color').value=this.value; applyVisualProperty('color', this.value)" class="w-7 h-7 bg-transparent cursor-pointer rounded">
+                                    <input type="text" id="dev-vis-color" oninput="applyVisualProperty('color', this.value)" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-200 font-mono text-[11px]" placeholder="#ffffff">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Background Color</label>
+                                <div class="flex items-center gap-1.5">
+                                    <input type="color" id="dev-vis-bg-picker" oninput="document.getElementById('dev-vis-bg').value=this.value; applyVisualProperty('backgroundColor', this.value)" class="w-7 h-7 bg-transparent cursor-pointer rounded">
+                                    <input type="text" id="dev-vis-bg" oninput="applyVisualProperty('backgroundColor', this.value)" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-200 font-mono text-[11px]" placeholder="#000000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Font Size (px)</label>
+                                <input type="number" id="dev-vis-fontsize" oninput="applyVisualProperty('fontSize', this.value ? this.value + 'px' : '')" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" placeholder="16">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-semibold block mb-1">Border Radius (px)</label>
+                                <input type="number" id="dev-vis-radius" oninput="applyVisualProperty('borderRadius', this.value !== '' ? this.value + 'px' : '')" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" placeholder="24">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-semibold block mb-1">Display / Visibility</label>
+                            <select id="dev-vis-display" onchange="applyVisualProperty('display', this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-sans">
+                                <option value="">ປົກກະຕິ (Default)</option>
+                                <option value="block">Block</option>
+                                <option value="flex">Flex</option>
+                                <option value="inline-flex">Inline Flex</option>
+                                <option value="none">ຊ່ອນ Element (Display None)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-semibold block mb-1">ແກ້ໄຂຂໍ້ຄວາມພາຍໃນ (Inner Text)</label>
+                            <input type="text" id="dev-vis-text" oninput="applyVisualText(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 font-sans" placeholder="ປ້ອນຂໍ້ຄວາມໃໝ່...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-PANEL 2: SOURCE CODE EDITOR -->
+                <div id="dev-sub-code" class="hidden p-3 space-y-3 flex-1 flex flex-col overflow-hidden min-h-[300px]">
+                    <!-- File Switcher Bar -->
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-800 shrink-0 text-xs">
+                        <div class="flex items-center gap-1 overflow-x-auto custom-scrollbar">
+                            <button onclick="switchDevCodeFile('html')" id="code-file-html" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-mono font-bold">HTML</button>
+                            <button onclick="switchDevCodeFile('css')" id="code-file-css" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono">CSS</button>
+                            <button onclick="switchDevCodeFile('js')" id="code-file-js" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono">JS</button>
+                            <button onclick="switchDevCodeFile('config')" id="code-file-config" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono">Config</button>
+                        </div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Source Live</span>
+                    </div>
+
+                    <!-- Search / Filter Bar -->
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <input type="text" id="dev-code-search" placeholder="ຄົ້ນຫາຂໍ້ຄວາມໃນໂຄດ..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-slate-200 font-mono text-xs" oninput="searchInCode(this.value)">
+                        <button onclick="copyCurrentCode()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono" title="ຄັດລອກໂຄດ">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <!-- Real Source Code Container with Line Numbers -->
+                    <div class="flex-1 bg-slate-950 rounded-xl border border-slate-800 flex overflow-hidden font-mono text-[11px] relative">
+                        <div id="dev-line-numbers" class="w-9 py-2 bg-slate-900 border-r border-slate-800 text-slate-600 text-right pr-2 select-none shrink-0 leading-relaxed overflow-hidden">
+                            1
+                        </div>
+                        <textarea 
+                            id="dev-code-editor" 
+                            class="flex-1 p-2 bg-transparent text-emerald-400 focus:outline-none resize-none code-textarea leading-relaxed custom-scrollbar font-mono border-none"
+                            spellcheck="false"
+                            oninput="onDevCodeInput()"
+                            onscroll="document.getElementById('dev-line-numbers').scrollTop = this.scrollTop"
+                        ></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 shrink-0 pt-1">
+                        <span id="dev-code-status">Source Ready</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="saveDevDraft()" class="text-indigo-400 hover:underline">
+                                <i class="fa-solid fa-floppy-disk"></i> ບັນທຶກ Draft
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-PANEL 3: ADVANCED PERFORMANCE & UI TWEAKS -->
+                <div id="dev-sub-settings" class="hidden p-4 space-y-4 text-xs">
+                    <div class="space-y-1 pb-2 border-b border-slate-800">
+                        <h4 class="font-bold text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-indigo-400"></i> Advance Dynamic UI Parameters
+                        </h4>
+                        <p class="text-[11px] text-slate-400">ປັບຄ່າ UI Real-time ເຫັນຜົນໃນ Sandbox ທັນທີ</p>
+                    </div>
+
+                    <!-- UI Scale Slider -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-300 font-semibold">UI Scale Factor</span>
+                            <span id="val-ui-scale" class="font-mono text-indigo-400">100%</span>
+                        </div>
+                        <input type="range" id="range-dev-scale" min="80" max="120" value="100" class="w-full accent-indigo-500" oninput="tweakParam('scale', this.value)">
+                    </div>
+
+                    <!-- Animation Speed -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-300 font-semibold">Animation Speed</span>
+                            <span id="val-anim-speed" class="font-mono text-indigo-400">0.22s</span>
+                        </div>
+                        <input type="range" id="range-dev-anim" min="0" max="10" value="2" class="w-full accent-indigo-500" oninput="tweakParam('anim', this.value)">
+                    </div>
+
+                    <!-- Global Glass Blur -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-300 font-semibold">Glass Backdrop Blur</span>
+                            <span id="val-dev-blur" class="font-mono text-indigo-400">3px</span>
+                        </div>
+                        <input type="range" id="range-dev-blur" min="0" max="40" value="3" class="w-full accent-indigo-500" oninput="tweakParam('blur', this.value)">
+                    </div>
+
+                    <!-- Glass Opacity -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-300 font-semibold">Glass Opacity</span>
+                            <span id="val-dev-opacity" class="font-mono text-indigo-400">25%</span>
+                        </div>
+                        <input type="range" id="range-dev-opacity" min="10" max="90" value="25" class="w-full accent-indigo-500" oninput="tweakParam('opacity', this.value)">
+                    </div>
+
+                    <!-- Border Radius Modifier -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-300 font-semibold">Global Corner Radius</span>
+                            <span id="val-dev-radius" class="font-mono text-indigo-400">32px</span>
+                        </div>
+                        <input type="range" id="range-dev-radius" min="0" max="50" value="32" class="w-full accent-indigo-500" oninput="tweakParam('radius', this.value)">
+                    </div>
+
+                    <!-- Performance Mode Switch -->
+                    <div class="p-3 rounded-xl bg-slate-800/80 flex items-center justify-between">
+                        <div>
+                            <p class="font-bold text-slate-200">Performance Mode</p>
+                            <p class="text-[10px] text-slate-400">ປິດ Blur ຊ່ວຍປະຢັດແບັດເຕີຣີ</p>
+                        </div>
+                        <input type="checkbox" id="dev-perf-toggle" onchange="togglePerfMode(this.checked)" class="w-4 h-4 accent-indigo-500">
+                    </div>
+
+                    <!-- Reset Options Button -->
+                    <button onclick="resetDevDraft()" class="w-full py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-400 font-bold border border-red-500/30 m3-btn">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> ລຶບການແກ້ໄຂ Draft ທັງໝົດ (Reset)
+                    </button>
+                </div>
+
+                <!-- SUB-PANEL 4: SYSTEM INSPECTOR & LOGS -->
+                <div id="dev-sub-inspector" class="hidden p-3 space-y-3 flex-1 flex flex-col overflow-hidden text-xs font-mono min-h-[280px]">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-800 shrink-0">
+                        <span class="text-slate-300 font-bold">Console & Diagnostics</span>
+                        <button onclick="clearConsoleLogs()" class="text-[10px] text-red-400 hover:underline">Clear</button>
+                    </div>
+
+                    <div id="dev-console-box" class="flex-1 bg-slate-950 p-2.5 rounded-xl border border-slate-800 overflow-y-auto custom-scrollbar space-y-1 text-[11px]">
+                        <div class="text-slate-500">[System] Lao O-Gae Developer Inspector Initialized...</div>
+                        <div class="text-emerald-400">[Info] Sandbox Ready (Clean Scope)</div>
+                    </div>
+
+                    <!-- System Info Diagnostic Summary -->
+                    <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1 text-[10px] text-slate-400 shrink-0">
+                        <div class="flex justify-between">
+                            <span>Screen Resolution:</span>
+                            <span id="dev-info-res" class="text-slate-200">1920x1080</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>User Agent:</span>
+                            <span id="dev-info-agent" class="text-slate-200 truncate max-w-[150px]">Browser</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Local Storage Draft Size:</span>
+                            <span id="dev-info-storage" class="text-indigo-400 font-bold">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: LIVE SANDBOX PREVIEW WINDOW -->
+            <div class="flex-1 bg-slate-950 flex flex-col relative overflow-hidden">
+                <!-- Sandbox Toolbar -->
+                <div class="bg-slate-900 px-3 py-2 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 shrink-0">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="font-mono text-slate-200 font-bold">Live Sandbox Preview</span>
+                        <span id="sandbox-selected-badge" class="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">Click any element to inspect</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="setSandboxViewport('desktop')" id="btn-vp-desktop" class="px-2 py-0.5 rounded bg-indigo-600 text-white font-mono text-[11px]" title="Desktop View">🖥️ PC</button>
+                        <button onclick="setSandboxViewport('mobile')" id="btn-vp-mobile" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px]" title="Mobile View">📱 Phone</button>
+                    </div>
+                </div>
+
+                <!-- Iframe Container -->
+                <div id="sandbox-wrapper" class="flex-1 w-full h-full flex items-center justify-center p-2 bg-slate-950 overflow-auto">
+                    <iframe id="dev-sandbox-iframe" class="w-full h-full border border-slate-800 rounded-xl bg-slate-100 dark:bg-[#070810] shadow-2xl transition-all" sandbox="allow-scripts allow-same-origin"></iframe>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 liquid-glass text-slate-900 dark:text-white text-xs px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 z-50 border border-indigo-500/30">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>
+        <span id="toast-msg" class="font-semibold">ຄັດລອກຂໍ້ຄວາມແລ້ວ!</span>
+    </div>
+
+    <!-- SINGLE STABLE JS CONTROLLER -->
+    <script id="main-app-script">
+        const LAO_DICTIONARY = {
+            "ມື້ນີ້ໂຄດມ່ວນເລີຍໄປເລ່ນສວນສະຫນຸກ": "Mue Nee Khot Muan Loei Pai Len Suan Sa Nook",
+            "ມື້ນີ້ໂຄດມ່ວນເລີຍໄປເລ່ນສວນສະໜຸກ": "Mue Nee Khot Muan Loei Pai Len Suan Sa Nook",
+            "ມື້ນີ້ໄປເລ່ນສວນສະຫນຸກ": "Mue Nee Pai Len Suan Sa Nook",
+            "ມື້ນີ້ໄປເລ່ນສວນສະໜຸກ": "Mue Nee Pai Len Suan Sa Nook",
+            "ມື້ນີ້ໂຄດມ່ວນເລີຍ": "Mue Nee Khot Muan Loei",
+            "ສວນສະຫນຸກ": "Suan Sa Nook",
+            "ສວນສະໜຸກ": "Suan Sa Nook",
+            "ສະຫນຸກສະຫນານ": "Sa Nook Sa Nhan",
+            "ສະໜຸກສະໜານ": "Sa Nook Sa Nhan",
+            "ສະຫນຸກ": "Sa Nook",
+            "ສະໜຸກ": "Sa Nook",
+            "ມື້ນີ້": "Mue Nee",
+            "ມື້ອື່ນ": "Mue Uen",
+            "ມື້ວານ": "Mue Van",
+            "ມື້ກີ້": "Mue Kee",
+            "ຕອນເຊົ້າ": "Ton Sao",
+            "ຕອນສວຍ": "Ton Suay",
+            "ຕອນແລງ": "Ton Laeng",
+            "ຕອນຄ່ຳ": "Ton Kham",
+            "ກາງຄືນ": "Kang Khuen",
+            "ດຽວນີ້": "Diao Nee",
+            "ທຸກມື້": "Thuk Mue",
+            "ວັນຈັນ": "Van Chan",
+            "ວັນອັງຄານ": "Van Ang Khan",
+            "ວັນພຸດ": "Van Phut",
+            "ວັນພະຫັດ": "Van Pha Hat",
+            "ວັນສຸກ": "Van Suk",
+            "ວັນເສົາ": "Van Sao",
+            "ວັນອາທິດ": "Van A Thit",
+            "ໂຄດ": "Khot",
+            "ມ່ວນ": "Muan",
+            "ມ່ວນຫຼາຍ": "Muan Lai",
+            "ເລີຍ": "Loei",
+            "ໄປ": "Pai",
+            "ໄປທ່ຽວ": "Pai Thiao",
+            "ເລ່ນ": "Len",
+            "ຫຼິ້ນ": "Lin",
+            "ຫລິ້ນ": "Lin",
+            "ສວນ": "Suan",
+            "ສະບາຍດີ": "Sabaidee",
+            "ສະບາຍດີບໍ": "Sabaidee Bor",
+            "ສະບາຍດີປີໃໝ່": "Sabaidee Pi Mai",
+            "ຂອບໃຈ": "Khop Chai",
+            "ຂອບໃຈຫຼາຍໆ": "Khop Chai Lai Lai",
+            "ຂອບໃຈເດີ້": "Khop Chai Doe",
+            "ຂໍໂທດ": "Kho Thot",
+            "ຮັກ": "Hak",
+            "ຮັກແພງ": "Hak Phaeng",
+            "ເຈົ້າ": "Chao",
+            "ຂ້ອຍ": "Khoy",
+            "ພວກເຮົາ": "Phuak Hao",
+            "ເຮົາ": "Hao",
+            "ລາວ": "Lao",
+            "ເຂົາເຈົ້າ": "Khao Chao",
+            "ທ່ານ": "Than",
+            "ນີ້": "Nee",
+            "ນັ້ນ": "Nan",
+            "ຢູ່": "Yu",
+            "ກັບ": "Kap",
+            "ແລະ": "Lae",
+            "ຫຼື": "Lue",
+            "ແຕ່": "Tae",
+            "ເພາະວ່າ": "Pho Va",
+            "ຖ້າວ່າ": "Tha Va",
+            "ກໍໄດ້": "Kor Dai",
+            "ແທ້ໆ": "Thae Thae",
+            "ບໍ່": "Bor",
+            "ແມ່ນ": "Maen",
+            "ບໍ່ແມ່ນ": "Bor Maen",
+            "ໄດ້": "Dai",
+            "ບໍ່ໄດ້": "Bor Dai",
+            "ຢູ່ດີມີແຮງ": "Yu Dee Mee Haeng",
+            "ໂຊກດີ": "Sok Dee",
+            "ຝັນດີ": "Fan Dee",
+            "ຍິນດີຕ້ອນຮັບ": "Yin Dee Ton Hap",
+            "ເປັນແນວໃດ": "Pen Naew Dai",
+            "ໄປໃສ": "Pai Sai",
+            "ມຶງໄປໃສ": "Mueng Pai Sai",
+            "ມຶງ": "Mueng",
+            "ກູ": "Koo",
+            "ສ່ຽວ": "Siao",
+            "ບັກ": "Bak",
+            "ອີ": "Ee",
+            "ແດ່": "Dae",
+            "ເດີ້": "Doe",
+            "ກິນຂ້າວ": "Kin Khao",
+            "ກິນເຂົ້າ": "Kin Khao",
+            "ກິນນ້ຳ": "Kin Nam",
+            "ກິນເບຍ": "Kin Beer",
+            "ດື່ມ": "Duem",
+            "ດື່ມນ້ຳ": "Duem Nam",
+            "ນ້ຳ": "Nam",
+            "ເຂົ້າ": "Khao",
+            "ເຂົ້າໜຽວ": "Khao Niao",
+            "ອາຫານ": "A Han",
+            "ຕຳໝາກຫຸ່ງ": "Tam Mak Hung",
+            "ລາບ": "Lap",
+            "ເຝີ": "Foe",
+            "ແຊບ": "Saep",
+            "ແຊບຫຼາຍ": "Saep Lai",
+            "ຫຼາຍ": "Lai",
+            "ຫຼາຍໆ": "Lai Lai",
+            "ໜ້ອຍໜຶ່ງ": "Noy Nueng",
+            "ອີ່ຫຼີ": "Ee Lee",
+            "ແມ່ນແລ້ວ": "Maen Laew",
+            "ແລ້ວ": "Laew",
+            "ຫຼວງພະບາງ": "Luang Prabang",
+            "ວຽງຈັນ": "Viang Chan",
+            "ຈຳປາສັກ": "Champasak",
+            "ປະເທດລາວ": "Pa Thet Lao",
+            "ພາສາລາວ": "Pha Sa Lao",
+            "ຄົນລາວ": "Khon Lao",
+            "ເຮືອນ": "Huan",
+            "ບ້ານ": "Ban",
+            "ເມືອງ": "Mueang",
+            "ແຂວງ": "Khwaeng",
+            "ຖະໜົນ": "Tha Non",
+            "ຫ້ອງການ": "Hong Kan",
+            "ສະໜາມບິນ": "Sa Nam Bin",
+            "ວັດ": "Vat",
+            "ໂຮງຮຽນ": "Hong Hian",
+            "ໂຮງໝໍ": "Hong Mor",
+            "ຕະຫຼາດ": "Ta Lat",
+            "ຮ້ານອາຫານ": "Han A Han",
+            "ເບຍລາວ": "Beer Lao",
+            "ກາເຟ": "Ka Fe",
+            "ຊາ": "Sa",
+            "ຫມູ່": "Moo",
+            "ໝູ່": "Moo",
+            "ເພື່ອນ": "Phuan",
+            "ອ້າຍ": "Ai",
+            "ເອື້ອຍ": "Euay",
+            "ນ້ອງ": "Nong",
+            "ພໍ່": "Pho",
+            "ແມ່": "Mae",
+            "ລູກ": "Look",
+            "ປ້າ": "Pa",
+            "ລຸງ": "Lung",
+            "ອາວ": "Ao",
+            "ອາ": "A",
+            "ເຖົ້າ": "Thao",
+            "ຜູ້ຊາຍ": "Phoo Sai",
+            "ຜູ້ຍິງ": "Phoo Ying",
+            "ເດັກນ້ອຍ": "Dek Noy",
+            "ຄອບຄົວ": "Khop Khua",
+            "ແຟນ": "Faen",
+            "ງາມ": "Ngam",
+            "ງາມຫຼາຍ": "Ngam Lai",
+            "ໜ້າຮັກ": "Na Hak",
+            "ຄິດຮອດ": "Khit Hot",
+            "ຄິດເຖິງ": "Khit Thoeng",
+            "ລາກ່ອນ": "La Kon",
+            "ພົບກັນໃໝ່": "Phop Kan Mai",
+            "ຮັກເຈົ້າ": "Hak Chao",
+            "ກິນຂ້າວແລ້ວບໍ": "Kin Khao Laew Bor",
+            "ກິນເຂົ້າແລ້ວບໍ": "Kin Khao Laew Bor",
+            "ເຮັດຫຍັງ": "Het Yang",
+            "ເຮັດວຽກ": "Het Viak",
+            "ບໍ່ເປັນຫຍັງ": "Bor Pen Yang",
+            "ອັນໃດ": "An Dai",
+            "ເທົ່າໃດ": "Thao Dai",
+            "ຢູ່ໃສ": "Yu Sai",
+            "ງາມແທ້": "Ngam Thae",
+            "ສະບາຍ": "Sa Bai",
+            "ໂຊກດີເດີ": "Sok Dee Doe",
+            "ໄປກ່ອນເດີ": "Pai Kon Doe",
+            "ເງິນ": "Ngoen",
+            "ຄຳ": "Kham",
+            "ມາ": "Ma",
+            "ກັບບ້ານ": "Kap Ban",
+            "ນອນ": "Non",
+            "ຕື່ນ": "Tuen",
+            "ອາບນ້ຳ": "Ap Nam",
+            "ຊື້": "Sue",
+            "ຂາຍ": "Khai",
+            "ເບິ່ງ": "Boeng",
+            "ຟັງ": "Fang",
+            "ເວົ້າ": "Vao",
+            "ຖາມ": "Tham",
+            "ຕອບ": "Top",
+            "ຮຽນ": "Hian",
+            "ອ່ານ": "An",
+            "ຂຽນ": "Khian",
+            "ຊ່ວຍ": "Suay",
+            "ຊ່ວຍແດ່": "Suay Dae",
+            "ຖ້າ": "Tha",
+            "ຈື່": "Chue",
+            "ລືມ": "Luem",
+            "ຮູ້": "Hoo",
+            "ບໍ່ຮູ້": "Bor Hoo",
+            "ເຂົ້າໃຈ": "Khao Chai",
+            "ບໍ່ເຂົ້າໃຈ": "Bor Khao Chai",
+            "ມັກ": "Mak",
+            "ບໍ່ມັກ": "Bor Mak",
+            "ຢາກ": "Yak",
+            "ຕ້ອງການ": "Tong Kan",
+            "ດີ": "Dee",
+            "ບໍ່ດີ": "Bor Dee",
+            "ໃຫຍ່": "Yai",
+            "ນ້ອຍ": "Noy",
+            "ຮ້ອນ": "Hon",
+            "ໜາວ": "Nao",
+            "ເຢັນ": "Yen",
+            "ເມື່ອຍ": "Mueay",
+            "ຫິວ": "Hew",
+            "ຫິວເຂົ້າ": "Hew Khao",
+            "ອີ່ມ": "Eem",
+            "ເຈັບ": "Chep",
+            "ເຈັບຫົວ": "Chep Hua",
+            "ໄວ": "Vai",
+            "ຊ້າ": "Sa",
+            "ໃໝ່": "Mai",
+            "ເກົ່າ": "Kao",
+            "ແພງ": "Phaeng",
+            "ຖືກ": "Thuek",
+            "ຍາກ": "Yak",
+            "ງ່າຍ": "Ngai",
+            "ສະອາດ": "Sa At",
+            "ເປື້ອນ": "Puean",
+            "ລົດ": "Lot",
+            "ລົດຈັກ": "Lot Chak",
+            "ລົດໃຫຍ່": "Lot Yai",
+            "ໂທລະສັບ": "Tho La Sap",
+            "ເຄື່ອງ": "Khueang",
+            "ເສື້ອ": "Suea",
+            "ໂສ້ງ": "Song",
+            "ເກີບ": "Koep",
+            "ປຶ້ມ": "Puem",
+            "ບິກ": "Bik"
+        };
+
+        const LAO_CONSONANT_MAP = {
+            'ກ': 'k', 'ຂ': 'kh', 'ຄ': 'kh', 'ງ': 'ng', 'ຈ': 'ch', 'ສ': 's', 'ຊ': 's',
+            'ຍ': 'y', 'ດ': 'd', 'ຕ': 't', 'ຖ': 'th', 'ທ': 'th', 'ນ': 'n', 'ບ': 'b',
+            'ປ': 'p', 'ຜ': 'ph', 'ຝ': 'f', 'ພ': 'ph', 'ຟ': 'f', 'ມ': 'm', 'ຢ': 'y',
+            'ຣ': 'r', 'ລ': 'l', 'ວ': 'v', 'ຫ': 'h', 'ອ': '', 'ຮ': 'h',
+            'ໜ': 'n', 'ໝ': 'm', 'ຫຼ': 'l'
+        };
+
+        const LAO_FINAL_CONSONANTS = {
+            'ກ': 'k', 'ຂ': 'k', 'ຄ': 'k',
+            'ດ': 't', 'ຕ': 't', 'ຖ': 't', 'ທ': 't', 'ສ': 't', 'ຊ': 't', 'ຈ': 't',
+            'ບ': 'p', 'ປ': 'p', 'ຜ': 'p', 'ພ': 'p', 'ຝ': 'p', 'ຟ': 'p',
+            'ງ': 'ng', 'ນ': 'n', 'ມ': 'm', 'ຣ': 'n', 'ລ': 'n',
+            'ຍ': 'i', 'ວ': 'w'
+        };
+
+        const LAO_COMPOUND_CONSONANTS = [
+            { lao: 'ຫຼ', sound: 'l' },
+            { lao: 'ຫນ', sound: 'n' },
+            { lao: 'ຫມ', sound: 'm' },
+            { lao: 'ຫລ', sound: 'l' },
+            { lao: 'ຫງ', sound: 'ng' },
+            { lao: 'ຫຍ', sound: 'y' },
+            { lao: 'ຫວ', sound: 'v' },
+            { lao: 'ຫຣ', sound: 'r' },
+            { lao: 'ກຼ', sound: 'kl' },
+            { lao: 'ຂຼ', sound: 'khl' },
+            { lao: 'ຄຼ', sound: 'khl' },
+            { lao: 'ປຼ', sound: 'pl' },
+            { lao: 'ພຼ', sound: 'phl' }
+        ];
+
+        const LAO_DIGITS_MAP = {
+            '໐': '0', '໑': '1', '໒': '2', '໓': '3', '໔': '4',
+            '໕': '5', '໖': '6', '໗': '7', '໘': '8', '໙': '9'
+        };
+
+        const ALL_VOWEL_MARKS = ['ະ', 'າ', 'ິ', 'ີ', 'ຶ', 'ື', 'ຸ', 'ູ', 'ົ', 'ັ', 'ໍ', 'ຽ', 'ຳ', 'ໍາ'];
+        const DEPENDENT_MARKS = [...ALL_VOWEL_MARKS, 'ຼ', '໌'];
+        const PRE_VOWELS = ['ເ', 'ແ', 'ໂ', 'ໄ', 'ໃ'];
+
+        function isToneMark(ch) { return Boolean(ch) && /[\u0EC8-\u0ECD]/.test(ch); }
+        function isLaoDigit(ch) { return Boolean(ch) && LAO_DIGITS_MAP[ch] !== undefined; }
+        function isLaoChar(ch) { return Boolean(ch) && /[\u0E80-\u0EFF]/.test(ch) && !isLaoDigit(ch); }
+
+        function peekNonTone(text, idx, count = 2) {
+            let chars = [];
+            let pos = idx;
+            while (pos < text.length && chars.length < count) {
+                if (!isToneMark(text[pos])) {
+                    chars.push({ ch: text[pos], pos });
+                }
+                pos++;
+            }
+            return chars;
+        }
+
+        function canWordAbsorbFinalConsonant(word) {
+            if (!word) return false;
+            const nonTones = [];
+            for (let idx = 0; idx < word.length; idx++) {
+                if (!isToneMark(word[idx])) {
+                    nonTones.push(word[idx]);
+                }
+            }
+            if (nonTones.length === 0) return false;
+            const last = nonTones[nonTones.length - 1];
+            const prev = nonTones.length >= 2 ? nonTones[nonTones.length - 2] : '';
+
+            // Explicitly closed/short open syllables never take a following final consonant
+            if (['ະ', 'ຳ', 'ໍາ', 'ໆ'].includes(last)) return false;
+            if (prev === 'ົ' && last === 'າ') return false; // ເ-ົາ
+
+            // Check if the last syllable starts with ໄ or ໃ (never takes a final consonant)
+            for (let k = nonTones.length - 1; k >= Math.max(0, nonTones.length - 3); k--) {
+                if (nonTones[k] === 'ໄ' || nonTones[k] === 'ໃ') {
+                    return false;
+                }
+            }
+
+            // Open trailing vowel marks that naturally accept a final consonant
+            if (['າ', 'ິ', 'ີ', 'ຶ', 'ື', 'ຸ', 'ູ', 'ໍ', 'ຽ', 'ອ'].includes(last)) {
+                return true;
+            }
+
+            // Pre-vowel + single consonant (e.g. ເກ, ແມ, ໂຕ) can take a final consonant
+            if (LAO_CONSONANT_MAP[last] !== undefined && PRE_VOWELS.includes(prev)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function startsNewSyllableAt(text, pos) {
+            if (pos >= text.length) return true;
+            const ch = text[pos];
+            if (!isLaoChar(ch) || PRE_VOWELS.includes(ch) || ch === 'ໆ') return true;
+            if (isToneMark(ch) || DEPENDENT_MARKS.includes(ch)) return false;
+
+            const next2 = peekNonTone(text, pos + 1, 2);
+            const a1 = next2[0]?.ch || '';
+            const a2 = next2[1]?.ch || '';
+
+            // Compound consonant onset (e.g., ຫຼ, ຫນ, ຫມ, ກຼ)
+            if (LAO_COMPOUND_CONSONANTS.some(c => c.lao === ch + a1)) {
+                return true;
+            }
+
+            // Followed directly by a dependent vowel mark (e.g., ກິ, ມາ, ຄົ, ຮັ)
+            if (ALL_VOWEL_MARKS.includes(a1)) {
+                return true;
+            }
+
+            // Followed by medial ອ or ວ + final consonant (e.g., ນອນ, ສວນ)
+            if ((a1 === 'ອ' || a1 === 'ວ') && LAO_FINAL_CONSONANTS[a2] && !ALL_VOWEL_MARKS.includes(a2)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function isDictMatchAllowed(line, startIndex, keyLength) {
+            const key = line.substr(startIndex, keyLength);
+            const endIndex = startIndex + keyLength;
+
+            // 1. Check Left Boundary
+            if (startIndex > 0 && isLaoChar(line[startIndex - 1])) {
+                const prevChar = line[startIndex - 1];
+                const firstChar = key[0];
+
+                // Cannot start a dictionary word with a tone mark or dependent vowel
+                if (isToneMark(firstChar) || DEPENDENT_MARKS.includes(firstChar)) {
+                    return false;
+                }
+
+                // Cannot split compound consonants like ຫນ, ຫມ, ຫຼ
+                if (prevChar === 'ຫ' && ['ນ', 'ມ', 'ລ', 'ຼ', 'ງ', 'ຍ', 'ວ', 'ຣ'].includes(firstChar)) {
+                    return false;
+                }
+
+                // Cannot detach medial ວ/ອ from an un-voweled preceding consonant (e.g. "ວນ" inside "ສວນ")
+                if (!PRE_VOWELS.includes(firstChar) && LAO_CONSONANT_MAP[prevChar] !== undefined && prevChar !== 'ອ') {
+                    const beforePrev = startIndex >= 2 ? line[startIndex - 2] : '';
+                    if (!PRE_VOWELS.includes(beforePrev) && (firstChar === 'ວ' || firstChar === 'ອ')) {
+                        return false;
+                    }
+                }
+            }
+
+            // 2. Check Right Boundary
+            if (endIndex < line.length && isLaoChar(line[endIndex])) {
+                const nextChar = line[endIndex];
+
+                // Mai Yamok (ໆ) repeats the matched word cleanly
+                if (nextChar === 'ໆ') {
+                    return true;
+                }
+
+                // Tone marks or dependent vowels attach directly to the end of `key`, meaning `key` broke a syllable
+                if (isToneMark(nextChar) || DEPENDENT_MARKS.includes(nextChar)) {
+                    return false;
+                }
+
+                // Pre-vowels always begin a brand-new syllable
+                if (PRE_VOWELS.includes(nextChar)) {
+                    return true;
+                }
+
+                // If `key` ends in an open vowel that can absorb a final consonant,
+                // ensure `nextChar` actually starts a new syllable rather than acting as `key`'s final consonant
+                if (canWordAbsorbFinalConsonant(key) && LAO_FINAL_CONSONANTS[nextChar]) {
+                    if (!startsNewSyllableAt(line, endIndex)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        function transliterateLine(line) {
+            if (!line) return '';
+            const dictKeys = Object.keys(LAO_DICTIONARY).sort((a, b) => b.length - a.length);
+            let resultTokens = [];
+            let i = 0;
+
+            while (i < line.length) {
+                if (/\s/.test(line[i])) {
+                    i++;
+                    continue;
+                }
+
+                // Handle Lao digits (໐-໙ -> 0-9)
+                if (isLaoDigit(line[i])) {
+                    let numChunk = '';
+                    while (i < line.length && isLaoDigit(line[i])) {
+                        numChunk += LAO_DIGITS_MAP[line[i]];
+                        i++;
+                    }
+                    if (numChunk) resultTokens.push(numChunk);
+                    continue;
+                }
+
+                // Handle Mai Yamok repetition mark (ໆ)
+                if (line[i] === 'ໆ') {
+                    if (resultTokens.length > 0) {
+                        resultTokens.push(resultTokens[resultTokens.length - 1]);
+                    }
+                    i++;
+                    continue;
+                }
+
+                // Boundary-aware dictionary lookup
+                let matchedDict = false;
+                for (let key of dictKeys) {
+                    if (line.substr(i, key.length) === key && isDictMatchAllowed(line, i, key.length)) {
+                        resultTokens.push(LAO_DICTIONARY[key]);
+                        i += key.length;
+                        matchedDict = true;
+                        break;
+                    }
+                }
+                if (matchedDict) continue;
+
+                let char = line[i];
+
+                if (!isLaoChar(char)) {
+                    let nonLaoChunk = '';
+                    while (i < line.length && !isLaoChar(line[i]) && !isLaoDigit(line[i]) && !/\s/.test(line[i])) {
+                        nonLaoChunk += line[i];
+                        i++;
+                    }
+                    if (nonLaoChunk) resultTokens.push(nonLaoChunk);
+                    continue;
+                }
+
+                if (isToneMark(char)) {
+                    i++;
+                    continue;
+                }
+
+                let preVowel = '';
+                if (PRE_VOWELS.includes(char)) {
+                    preVowel = char;
+                    i++;
+                }
+
+                while (i < line.length && isToneMark(line[i])) i++;
+
+                let initialCons = '';
+                let compoundMatched = false;
+                let sub2 = line.substr(i, 2);
+                for (let comp of LAO_COMPOUND_CONSONANTS) {
+                    if (sub2 === comp.lao) {
+                        initialCons = comp.sound;
+                        i += 2;
+                        compoundMatched = true;
+                        break;
+                    }
+                }
+
+                if (!compoundMatched) {
+                    if (line[i] && LAO_CONSONANT_MAP[line[i]] !== undefined) {
+                        initialCons = LAO_CONSONANT_MAP[line[i]];
+                        i++;
+                    } else if (line[i] === 'ອ') {
+                        initialCons = '';
+                        i++;
+                    } else if (!preVowel) {
+                        i++;
+                        continue;
+                    }
+                }
+
+                while (i < line.length && isToneMark(line[i])) i++;
+
+                if (line[i] === 'ວ') {
+                    const afterW = peekNonTone(line, i + 1, 2);
+                    const c1 = afterW[0]?.ch || '';
+                    const c2 = afterW[1]?.ch || '';
+                    const hasFollowingVowel = ['າ', 'ະ', 'ັ', 'ິ', 'ີ', 'ຶ', 'ື', 'ຽ'].includes(c1);
+                    const isPreVowelWithFinal = Boolean(preVowel) && Boolean(LAO_FINAL_CONSONANTS[c1]) && !ALL_VOWEL_MARKS.includes(c2) && !PRE_VOWELS.includes(c2);
+                    if (hasFollowingVowel || isPreVowelWithFinal) {
+                        initialCons += 'w';
+                        i++;
+                        while (i < line.length && isToneMark(line[i])) i++;
+                    }
+                }
+
+                let vowelSound = '';
+                let isExplicitOpenVowel = false;
+                const peek2 = peekNonTone(line, i, 2);
+                const n1 = peek2[0]?.ch || '';
+                const n2 = peek2[1]?.ch || '';
+
+                if (preVowel === 'ເ') {
+                    if (n1 === 'ົ' && n2 === 'າ') {
+                        vowelSound = 'ao';
+                        isExplicitOpenVowel = true;
+                        i = peek2[1].pos + 1;
+                    } else if (n1 === 'ື' && n2 === 'ອ') {
+                        vowelSound = 'uea';
+                        i = peek2[1].pos + 1;
+                    } else if (n1 === 'ັ' && n2 === 'ຍ') {
+                        vowelSound = 'ia';
+                        isExplicitOpenVowel = true;
+                        i = peek2[1].pos + 1;
+                    } else if (n1 === 'ຍ' && !ALL_VOWEL_MARKS.includes(n2)) {
+                        vowelSound = 'ia';
+                        isExplicitOpenVowel = true;
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ິ' || n1 === 'ີ') {
+                        vowelSound = 'oe';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'າ' && n2 === 'ະ') {
+                        vowelSound = 'o';
+                        isExplicitOpenVowel = true;
+                        i = peek2[1].pos + 1;
+                    } else if (n1 === 'ັ') {
+                        vowelSound = 'e';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ະ') {
+                        vowelSound = 'e';
+                        isExplicitOpenVowel = true;
+                        i = peek2[0].pos + 1;
+                    } else {
+                        vowelSound = 'e';
+                    }
+                } else if (preVowel === 'ແ') {
+                    if (n1 === 'ະ') {
+                        vowelSound = 'ae';
+                        isExplicitOpenVowel = true;
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ັ') {
+                        vowelSound = 'ae';
+                        i = peek2[0].pos + 1;
+                    } else {
+                        vowelSound = 'ae';
+                    }
+                } else if (preVowel === 'ໂ') {
+                    if (n1 === 'ະ') {
+                        vowelSound = 'o';
+                        isExplicitOpenVowel = true;
+                        i = peek2[0].pos + 1;
+                    } else {
+                        vowelSound = 'o';
+                    }
+                } else if (preVowel === 'ໄ' || preVowel === 'ໃ') {
+                    vowelSound = 'ai';
+                    isExplicitOpenVowel = true;
+                } else {
+                    if (n1 === 'ຳ' || (n1 === 'ໍ' && n2 === 'າ')) {
+                        vowelSound = 'am';
+                        isExplicitOpenVowel = true;
+                        i = (n1 === 'ຳ' ? peek2[0].pos : peek2[1].pos) + 1;
+                    } else if (n1 === 'ັ' && n2 === 'ຍ') {
+                        vowelSound = 'ai';
+                        isExplicitOpenVowel = true;
+                        i = peek2[1].pos + 1;
+                    } else if ((n1 === 'ົ' || n1 === 'ັ') && n2 === 'ວ') {
+                        vowelSound = 'ua';
+                        isExplicitOpenVowel = true;
+                        i = peek2[1].pos + 1;
+                    } else if (n1 === 'ຽ') {
+                        vowelSound = 'ia';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ິ') {
+                        vowelSound = 'i';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ີ') {
+                        vowelSound = 'ee';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ຶ' || n1 === 'ື') {
+                        vowelSound = 'ue';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ຸ') {
+                        vowelSound = 'u';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ູ') {
+                        vowelSound = 'oo';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ະ') {
+                        vowelSound = 'a';
+                        isExplicitOpenVowel = true;
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'າ') {
+                        vowelSound = 'a';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ໍ') {
+                        vowelSound = 'or';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ົ') {
+                        vowelSound = 'o';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ັ') {
+                        vowelSound = 'a';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ວ' && (peek2.length === 1 || LAO_FINAL_CONSONANTS[n2] || !ALL_VOWEL_MARKS.includes(n2))) {
+                        vowelSound = 'ua';
+                        i = peek2[0].pos + 1;
+                    } else if (n1 === 'ອ' && (peek2.length > 1 && LAO_FINAL_CONSONANTS[n2] && !ALL_VOWEL_MARKS.includes(n2))) {
+                        vowelSound = 'or';
+                        i = peek2[0].pos + 1;
+                    } else {
+                        vowelSound = 'a';
+                    }
+                }
+
+                while (i < line.length && isToneMark(line[i])) i++;
+
+                let finalCons = '';
+                if (!isExplicitOpenVowel && i < line.length && LAO_FINAL_CONSONANTS[line[i]]) {
+                    const nextChar = line[i];
+                    const afterFinalPeek = peekNonTone(line, i + 1, 2);
+                    const afterFinal = afterFinalPeek[0]?.ch || '';
+                    const afterFinal2 = afterFinalPeek[1]?.ch || '';
+                    const isCompoundNext = LAO_COMPOUND_CONSONANTS.some(c => c.lao === nextChar + afterFinal);
+                    const isMedialVowelNext = (afterFinal === 'ອ' || afterFinal === 'ວ') && LAO_FINAL_CONSONANTS[afterFinal2] && !ALL_VOWEL_MARKS.includes(afterFinal2);
+                    const isNextConsOfNewSyllable = ALL_VOWEL_MARKS.includes(afterFinal) || 
+                                                    PRE_VOWELS.includes(afterFinal) ||
+                                                    isCompoundNext ||
+                                                    isMedialVowelNext;
+
+                    if (!isNextConsOfNewSyllable) {
+                        finalCons = LAO_FINAL_CONSONANTS[nextChar];
+                        if (nextChar === 'ວ') {
+                            if (vowelSound === 'a') vowelSound = 'ao';
+                            else if (vowelSound === 'ae') vowelSound = 'aew';
+                            else if (vowelSound === 'e' || vowelSound === 'i') vowelSound = 'ew';
+                            finalCons = '';
+                        } else if (nextChar === 'ຍ') {
+                            if (vowelSound === 'a') vowelSound = 'ai';
+                            else if (vowelSound === 'o') vowelSound = 'oi';
+                            else if (vowelSound === 'ua') vowelSound = 'uay';
+                            else if (vowelSound === 'uea') vowelSound = 'ueay';
+                            else if (vowelSound === 'oe') vowelSound = 'oei';
+                            finalCons = '';
+                        }
+                        i++;
+                    }
+                }
+
+                resultTokens.push(initialCons + vowelSound + finalCons);
+            }
+
+            return resultTokens
+                .join(' ')
+                .replace(/\s+/g, ' ')
+                .replace(/\s+([\.\,\!\?\:\;])/g, '$1')
+                .trim();
+        }
+
+        function transliterateLaoRules(text) {
+            if (!text) return '';
+            return text
+                .split('\n')
+                .map(line => transliterateLine(line))
+                .join('\n');
+        }
+
+        function runTranslatorTests() {
+            const testCases = [
+                { input: 'ສະບາຍດີ', expected: 'Sabaidee' },
+                { input: 'ຊາຍ', expected: 'sai' },
+                { input: 'ຊາວ', expected: 'sao' },
+                { input: 'ດີໆ', expected: 'dee dee' },
+                { input: '໒໐໒໖', expected: '2026' },
+                { input: 'ກິນເຂົ້າແລ້ວບໍ', expected: 'Kin Khao Laew Bor' },
+                { input: 'ມື້ນີ້ໄປເລ່ນສວນສະໜຸກ', expected: 'Mue Nee Pai Len Suan Sa Nook' },
+                { input: 'ຊາຍໜຸ່ມ', expected: 'sai num' },
+                { input: 'ໄປຊາວ', expected: 'Pai sao' },
+                // Additional regression checks for fixed rules
+                { input: 'ຊາ', expected: 'Sa' },
+                { input: 'ເປັນ', expected: 'pen' },
+                { input: 'ເສຍໃຈ', expected: 'sia chai' },
+                { input: 'ຫຼັງ', expected: 'lang' }
+            ];
+
+            let passed = 0;
+            let failed = 0;
+            const results = [];
+
+            console.group('%c[Logao Laos-oke] Translator Test Suite', 'color: #6366f1; font-weight: bold; font-size: 13px;');
+            for (const tc of testCases) {
+                const actual = transliterateLaoRules(tc.input);
+                const isPass = actual.toLowerCase() === tc.expected.toLowerCase();
+                if (isPass) {
+                    passed++;
+                    console.log(`%cPASS%c | "${tc.input}" → "${actual}"`, 'background:#10b981;color:#fff;padding:1px 6px;border-radius:4px;font-weight:bold;', 'color:inherit;');
+                } else {
+                    failed++;
+                    console.error(`FAIL | "${tc.input}" → got "${actual}", expected "${tc.expected}"`);
+                }
+                results.push({
+                    input: tc.input,
+                    expected: tc.expected,
+                    actual,
+                    status: isPass ? 'PASS' : 'FAIL'
+                });
+            }
+            console.log(`Summary: ${passed}/${testCases.length} passed, ${failed} failed.`);
+            console.groupEnd();
+
+            return { passed, failed, total: testCases.length, results };
+        }
+        window.runTranslatorTests = runTranslatorTests;
+
+        const appState = {
+            theme: 'system',
+            glassBlur: 3,
+            glassOpacity: 25,
+            animSpeed: 'fast',
+            animCustomSec: 0.50,
+            language: 'lo',
+            styleOption: 'capitalize',
+            spacingOption: 'space',
+            activeTab: 'translator',
+            history: [],
+            favorites: []
+        };
+
+        const devState = {
+            activeSubTab: 'visual',
+            currentFile: 'html',
+            draftHTML: '',
+            selectedSelector: 'body',
+            currentBlobUrl: null,
+            uiScale: 100,
+            cardRadius: 32
+        };
+
+        const LANGUAGES = [
+            { code: 'lo', flag: '🇱🇦', name: 'ລາວ' },
+            { code: 'th', flag: '🇹🇭', name: 'ไทย' },
+            { code: 'en', flag: '🇺🇸', name: 'English' }
+        ];
+
+        const I18N = {
+            lo: {
+                subtitle: "ແປພາສາລາວເປັນໂອເກະ",
+                inputLang: "ພາສາລາວ (LAO SCRIPT)",
+                outputLang: "ພາສາໂອເກະ (O-GAE PHONETICS)",
+                placeholderInput: "ປ້ອນຂໍ້ຄວາມພາສາລາວຢູ່ທີ່ນີ້...",
+                placeholderOutput: "ຜົນລັບພາສາໂອເກະຈະສະແດງຢູ່ທີ່ນີ້...",
+                btnPaste: "ວາງ",
+                btnClear: "ລຶບ",
+                btnFav: "ມັກ",
+                btnCopy: "ຄັດລອກ",
+                examples: "ຕົວຢ່າງ:",
+                historyTitle: "ປະຫວັດ",
+                favTitle: "ລາຍການໂປຼດ",
+                navFav: "ໂປຼດ",
+                guideTitle: "ຄູ່ມື",
+                navTranslator: "ແປພາສາ",
+                historyDesc: "ລາຍການແປລ່າສຸດທີ່ບັນທຶກໄວ້ໃນເຄື່ອງ",
+                favDesc: "ຂໍ້ຄວາມທີ່ຕິດດາວໄວ້ເພື່ອເບິ່ງຄືນ",
+                clearHistory: "ລຶບປະຫວັດທັງໝົດ",
+                noHistory: "ບໍ່ມີປະຫວັດການແປ",
+                noFav: "ຍັງບໍ່ມີລາຍການໂປຼດ",
+                modalTitle: "ຕັ້ງຄ່າລະບົບ",
+                modalLangTitle: "ເລືອກພາສາ / Select Language",
+                themeLbl: "ທີມສະແດງຜົນ",
+                themeDesc: "ປັບປ່ຽນສີໜ້າຈໍແອັບ",
+                animLbl: "ຄວາມໄວແອນິເມຊັນ (Animation)",
+                animDesc: "ປັບປ່ຽນຄວາມໄວແອັບຕາມໃຈຊອບ",
+                blurLbl: "ຄວາມເບຼີກະຈົກ (Glass Blur)",
+                blurDesc: "ປັບຄວາມເບຼີແບບ Liquid Glass",
+                opacityLbl: "ຄວາມໂປ່ງໃສຂອງກະຈົກ (Opacity)",
+                opacityDesc: "ປັບຄວາມໂປ່ງໃສໃຫ້ເຫັນພື້ນຫຼັງ",
+                spaceLbl: "ຮູບແບບການເວັ້ນພະຍາງ",
+                spaceDesc: "ການໃສ່ຊ່ອງຫວ່າງລະຫວ່າງພະຍາງ",
+                privacyTitle: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ (Privacy Policy)",
+                privacyDesc: "ເວັບໄຊນີ້ບໍ່ມີການເກັບຮັກສາ ຫຼື ຮ້ອງຂໍຂໍ້ມູນສ່ວນຕົວໃດໆ ຂອງຜູ້ໃຊ້ງານຢ່າງເດັດຂາດ (No Personal Data Collected).",
+                contactTitle: "ຕິດຕໍ່ທີມງານ & ແຈ້ງບັນຫາ (Contact Support)",
+                addressTitle: "ທີ່ຢູ່:",
+                addressDesc: "ແຂວງຈຳປາສັກ, ເມືອງປະທຸມພອນ, ບ້ານບັງລຽງ",
+                donateTitle: "ສະໜັບສະໜູນຜູ້ພັດທະນາ (Donate)",
+                donateBank: "ທະນາຄານການຄ້າຕ່າງເທດລາວ (BCEL)",
+                donateNameTitle: "ຊື່ບັນຊີ:",
+                donateAccTitle: "ເລກບັນຊີ:",
+                btnCopyAcc: "ຄັດລອກເລກບັນຊີ",
+                toastCopiedAcc: "ຄັດລອກເລກບັນຊີແລ້ວ!",
+                appVersion: "ເວີຊັນ: 1.5 Dev",
+                appUpdated: "ອັບເດດລ່າສຸດ: 12/11/2026",
+                btnOk: "ຕົກລົງ / OK",
+                toastCopied: "ຄັດລອກຂໍ້ຄວາມແລ້ວ!",
+                toastCleared: "ລຶບຂໍ້ຄວາມແລ້ວ!",
+                toastFavAdded: "ເພີ່ມເຂົ້າລາຍການໂປຼດແລ້ວ!",
+                toastFavRemoved: "ລຶບອອກຈາກລາຍການໂປຼດແລ້ວ!",
+                toastHistoryCleared: "ລຶບປະຫວັດທັງໝົດແລ້ວ!",
+                toastPasteFallback: "ກະລຸນາກົດຄ້າງເພື່ອວາງຂໍ້ຄວາມ",
+                charUnit: "ຕົວອັກສອນ",
+                btnBackTrans: "ກັບໜ້າແປພາສາ",
+                guideHeading: "ຫຼັກເກນການຖອດພະຍັນຊະນະ ແລະ ສະຫຼະພາສາລາວເປັນຕົວອັກສອນໂຣມັນ (Logao Laos-oke Romanization Standard):",
+                alertBannerText: "ນະໂຍບາຍແລະຄວາມປອດໄພຂອງຜູ້ໃຊ້ງານທາງເວັບຈະບໍ່ມີການຂໍຂໍ້ມູນສ່ວນຕົວໃດໆທັງນັ້ນ ຫຼື ຮຽກເກັບເງິນໃນບັນຊີຂອງທ່ານ (ທ່ານສາມາດບໍລິຈາກຄ່າກາເຟໃຫ້ໄດ້ ເລກບັນຊີໃນການຕັ້ງຄ່າ 🙏🏻 ພົບບັນຫາຕິດຕໍ່ WhatsApp: 2091415737 | Email: alex889100@gmail.com)"
+            },
+            th: {
+                subtitle: "แปลภาษาลาวเป็นโอเกะ",
+                inputLang: "ภาษาลาว (LAO SCRIPT)",
+                outputLang: "ภาษาโอเกะ (O-GAE PHONETICS)",
+                placeholderInput: "ป้อนข้อความภาษาลาวที่นี่...",
+                placeholderOutput: "ผลลัพธ์ภาษาโอเกะจะแสดงที่นี่...",
+                btnPaste: "วาง",
+                btnClear: "ล้าง",
+                btnFav: "ชื่นชอบ",
+                btnCopy: "คัดลอก",
+                examples: "ตัวอย่าง:",
+                historyTitle: "ประวัติการแปลง",
+                favTitle: "รายการโปรด",
+                navFav: "โปรด",
+                guideTitle: "คู่มือการอ่าน",
+                navTranslator: "แปลภาษา",
+                historyDesc: "รายการแปลล่าสุดที่บันทึกไว้ในเครื่อง",
+                favDesc: "คำที่ติดดาวไว้เพื่อเรียกดูเร็ว",
+                clearHistory: "ลบประวัติทั้งหมด",
+                noHistory: "ไม่มีประวัติการแปลง",
+                noFav: "ยังไม่มีรายการโปรด",
+                modalTitle: "ตั้งค่าระบบ",
+                modalLangTitle: "เลือกภาษา / Select Language",
+                themeLbl: "ธีมแสดงผล",
+                themeDesc: "ปรับเปลี่ยนสีหน้าจอแอป",
+                animLbl: "ความเร็วแอนิเมชัน (Animation)",
+                animDesc: "ปรับความเร็วของการแสดงผล",
+                blurLbl: "ความเบลอกระจก (Glass Blur)",
+                blurDesc: "ปรับความเบลอแบบ Liquid Glass",
+                opacityLbl: "ความใสของกระจก (Opacity)",
+                opacityDesc: "ปรับความโปร่งใสให้เห็นฉากหลัง",
+                spaceLbl: "รูปแบบการเว้นพยางค์",
+                spaceDesc: "การใส่ช่องว่างระหว่างพยางค์",
+                privacyTitle: "นโยบายความเป็นส่วนตัว (Privacy Policy)",
+                privacyDesc: "เว็บไซต์นี้ไม่มีการเก็บรวบรวมหรือร้องขอข้อมูลส่วนตัวใดๆ ของผู้ใช้งานอย่างเด็ดขาด (No Personal Data Collected)",
+                contactTitle: "ติดต่อทีมงาน & แจ้งปัญหา (Contact Support)",
+                addressTitle: "ที่อยู่:",
+                addressDesc: "จังหวัดจำปาสัก, อำเภอประทุมพร, บ้านบังเลียง",
+                donateTitle: "สนับสนุนผู้พัฒนา (Donate)",
+                donateBank: "ธนาคารการค้าต่างประเทศลาว (BCEL)",
+                donateNameTitle: "ชื่อบัญชี:",
+                donateAccTitle: "เลขบัญชี:",
+                btnCopyAcc: "คัดลอกเลขบัญชี",
+                toastCopiedAcc: "คัดลอกเลขบัญชีแล้ว!",
+                appVersion: "เวอร์ชัน: 1.5 Dev",
+                appUpdated: "อัปเดตล่าสุด: 12/11/2026",
+                btnOk: "ตกลง / OK",
+                toastCopied: "คัดลอกข้อความแล้ว!",
+                toastCleared: "ล้างข้อความแล้ว!",
+                toastFavAdded: "เพิ่มในรายการโปรดแล้ว!",
+                toastFavRemoved: "ลบออกจากรายการโปรดแล้ว!",
+                toastHistoryCleared: "ลบประวัติทั้งหมดแล้ว!",
+                toastPasteFallback: "โปรดกดค้างเพื่อวางข้อความ",
+                charUnit: "ตัวอักษร",
+                btnBackTrans: "กลับหน้าแปลภาษา",
+                guideHeading: "หลักเกณฑ์การถอดพยัญชนะและสระภาษาลาวเป็นตัวอักษรโรมัน (Logao Laos-oke Romanization Standard):",
+                alertBannerText: "นโยบายความปลอดภัยของผู้ใช้งาน เว็บไซต์จะไม่ขอข้อมูลส่วนตัวหรือเรียกเก็บเงินใดๆ (สามารถบริจาคค่ากาแฟสนับสนุนผู้พัฒนาได้ที่เมนูตั้งค่า 🙏🏻 แจ้งปัญหาติดต่อ WhatsApp: 2091415737 | Email: alex889100@gmail.com)"
+            },
+            en: {
+                subtitle: "Lao to O-Gae Romanization",
+                inputLang: "Lao Script",
+                outputLang: "O-Gae Phonetics",
+                placeholderInput: "Enter Lao text here...",
+                placeholderOutput: "Romanized O-Gae output will appear here...",
+                btnPaste: "Paste",
+                btnClear: "Clear",
+                btnFav: "Favorite",
+                btnCopy: "Copy",
+                examples: "Examples:",
+                historyTitle: "History",
+                favTitle: "Favorites",
+                navFav: "Saved",
+                guideTitle: "Guide",
+                navTranslator: "Translate",
+                historyDesc: "Recent translations saved locally",
+                favDesc: "Starred items for quick access",
+                clearHistory: "Clear History",
+                noHistory: "No translation history",
+                noFav: "No favorites yet",
+                modalTitle: "Settings",
+                modalLangTitle: "Select Language",
+                themeLbl: "App Theme",
+                themeDesc: "Customize display theme",
+                animLbl: "Animation Speed",
+                animDesc: "Adjust application transition speed",
+                blurLbl: "Glass Blur",
+                blurDesc: "Adjust backdrop blur effect",
+                opacityLbl: "Glass Opacity",
+                opacityDesc: "Adjust glass translucency",
+                spaceLbl: "Syllable Spacing",
+                spaceDesc: "Adjust spacing between phonetics",
+                privacyTitle: "Privacy Policy",
+                privacyDesc: "This website does not collect, request, or store any personal data from users.",
+                contactTitle: "Contact Team & Support",
+                addressTitle: "Address:",
+                addressDesc: "BangLiang Village, Pathoumphone District, Champasak Province",
+                donateTitle: "Donate & Support Creator",
+                donateBank: "BCEL Bank (Laos)",
+                donateNameTitle: "Account Name:",
+                donateAccTitle: "Account No:",
+                btnCopyAcc: "Copy Account Number",
+                toastCopiedAcc: "Account number copied!",
+                appVersion: "Version: 1.5 Dev",
+                appUpdated: "Last Updated: 12/11/2026",
+                btnOk: "OK",
+                toastCopied: "Copied to clipboard!",
+                toastCleared: "Text cleared!",
+                toastFavAdded: "Added to favorites!",
+                toastFavRemoved: "Removed from favorites!",
+                toastHistoryCleared: "History cleared!",
+                toastPasteFallback: "Long press to paste text",
+                charUnit: "chars",
+                btnBackTrans: "Back to Translator",
+                guideHeading: "Standard Lao Romanization & Phonetic Transliteration Rules:",
+                alertBannerText: "User Privacy & Safety Policy: This site never requests personal data or charges any fees. (You can support the developer via the settings menu 🙏🏻 Contact Support via WhatsApp: 2091415737 | Email: alex889100@gmail.com)"
+            }
+        };
+
+        let historySaveTimer = null;
+
+        const colorSchemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function handleSystemThemeChange() {
+            if (appState.theme === 'system') {
+                applyTheme('system', true);
+            }
+        }
+
+        if (colorSchemeMediaQuery.addEventListener) {
+            colorSchemeMediaQuery.addEventListener('change', handleSystemThemeChange);
+        } else if (colorSchemeMediaQuery.addListener) {
+            colorSchemeMediaQuery.addListener(handleSystemThemeChange);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalStorage();
+            applyTheme(appState.theme, false);
+            applyGlassBlur(appState.glassBlur);
+            applyGlassOpacity(appState.glassOpacity);
+            applyAnimationSpeed(appState.animSpeed, false);
+            updateUIStrings();
+            renderLangModalOptions();
+            renderHistory();
+            renderFavorites();
+            switchTab(appState.activeTab || 'translator', false);
+            initDockTouchDrag();
+
+            const examplesContainer = document.getElementById('examples-container');
+            if (examplesContainer) {
+                examplesContainer.addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-example]');
+                    if (btn) {
+                        const text = btn.getAttribute('data-example');
+                        setExample(text);
+                    }
+                });
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeSettings();
+                    closeLangModal();
+                    const devModal = document.getElementById('dev-mode-modal');
+                    if (devModal && !devModal.classList.contains('hidden')) {
+                        closeDevMode();
+                    }
+                }
+            });
+
+            const navContainer = document.getElementById('nav-dock-container');
+            if (window.ResizeObserver && navContainer) {
+                new ResizeObserver(() => {
+                    requestAnimationFrame(() => {
+                        updateNavPillPosition(appState.activeTab, false);
+                        syncAllSegmentedPills(false);
+                    });
+                }).observe(navContainer);
+            } else {
+                window.addEventListener('resize', () => {
+                    requestAnimationFrame(() => {
+                        updateNavPillPosition(appState.activeTab, false);
+                        syncAllSegmentedPills(false);
+                    });
+                });
+            }
+        });
+
+        /* Smooth Touch/Drag Gliding on Bottom Dock */
+        function initDockTouchDrag() {
+            const dock = document.getElementById('nav-dock-container');
+            if (!dock) return;
+            const dockTabs = ['translator', 'history', 'favorites', 'guide'];
+            let isDragging = false;
+            let startX = 0;
+
+            dock.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    startX = e.touches[0].clientX;
+                    isDragging = false;
+                }
+            }, { passive: true });
+
+            dock.addEventListener('touchmove', (e) => {
+                if (e.touches.length !== 1) return;
+                const touch = e.touches[0];
+                if (Math.abs(touch.clientX - startX) > 10) {
+                    isDragging = true;
+                }
+                if (!isDragging) return;
+
+                for (const tab of dockTabs) {
+                    const btn = document.getElementById(`nav-btn-${tab}`);
+                    if (btn) {
+                        const rect = btn.getBoundingClientRect();
+                        if (touch.clientX >= rect.left && touch.clientX <= rect.right) {
+                            if (appState.activeTab !== tab) {
+                                switchTab(tab, true);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }, { passive: true });
+
+            dock.addEventListener('touchend', () => {
+                isDragging = false;
+            }, { passive: true });
+        }
+
+        function switchTab(tabName, animate = true) {
+            const isTabChanged = appState.activeTab !== tabName;
+            appState.activeTab = tabName;
+            
+            const pages = ['translator', 'history', 'favorites', 'guide'];
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if (el) {
+                    if (p === tabName) {
+                        el.classList.remove('hidden');
+                        el.classList.add('page-fade-in');
+                    } else {
+                        el.classList.add('hidden');
+                        el.classList.remove('page-fade-in');
+                    }
+                }
+            });
+
+            if (tabName === 'history') renderHistory();
+            if (tabName === 'favorites') renderFavorites();
+
+            const navButtons = ['translator', 'history', 'favorites', 'guide', 'settings'];
+            navButtons.forEach(btnKey => {
+                const btn = document.getElementById(`nav-btn-${btnKey}`);
+                if (btn) {
+                    if (btnKey === tabName) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                }
+            });
+
+            requestAnimationFrame(() => {
+                updateNavPillPosition(tabName, animate && isTabChanged);
+            });
+        }
+
+        function updateNavPillPosition(tabName, animate = true) {
+            const activeBtn = document.getElementById(`nav-btn-${tabName}`);
+            const pill = document.getElementById('nav-active-pill');
+
+            if (!activeBtn || !pill) return;
+
+            const targetLeft = activeBtn.offsetLeft;
+            const targetWidth = activeBtn.offsetWidth;
+            if (targetWidth === 0) return;
+
+            if (!animate) {
+                pill.classList.remove('pixel-pulse');
+                pill.style.transition = 'none';
+                pill.style.transform = `translate3d(${targetLeft}px, 0, 0)`;
+                pill.style.width = `${targetWidth}px`;
+                void pill.offsetWidth;
+                pill.style.transition = '';
+                return;
+            }
+
+            // Continuous, uninterrupted Google Pixel Material 3 Expressive spring glide
+            pill.classList.remove('pixel-pulse');
+            void pill.offsetWidth;
+            pill.classList.add('pixel-pulse');
+            pill.style.transform = `translate3d(${targetLeft}px, 0, 0)`;
+            pill.style.width = `${targetWidth}px`;
+        }
+
+        function updateSegmentedPill(pillId, activeBtnId, animate = true) {
+            const pill = document.getElementById(pillId);
+            const btn = document.getElementById(activeBtnId);
+            if (!pill || !btn) return;
+
+            const left = btn.offsetLeft;
+            const width = btn.offsetWidth;
+            if (width === 0) return;
+
+            if (!animate) {
+                pill.style.transition = 'none';
+                pill.style.transform = `translate3d(${left}px, 0, 0)`;
+                pill.style.width = `${width}px`;
+                void pill.offsetWidth;
+                pill.style.transition = '';
+            } else {
+                pill.style.transform = `translate3d(${left}px, 0, 0)`;
+                pill.style.width = `${width}px`;
+            }
+        }
+
+        function syncAllSegmentedPills(animate = false) {
+            updateSegmentedPill('style-seg-pill', appState.styleOption === 'capitalize' ? 'opt-cap' : 'opt-low', animate);
+            updateSegmentedPill('theme-seg-pill', `theme-btn-${appState.theme}`, animate);
+            updateSegmentedPill('anim-seg-pill', `anim-btn-${appState.animSpeed}`, animate);
+            updateSegmentedPill('spc-seg-pill', `spc-btn-${appState.spacingOption}`, animate);
+        }
+
+        function applyTheme(themeVal, animate = true) {
+            appState.theme = themeVal;
+            const htmlEl = document.documentElement;
+            
+            if (animate) {
+                htmlEl.classList.add('theme-transition');
+                setTimeout(() => htmlEl.classList.remove('theme-transition'), 420);
+            }
+
+            const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = themeVal === 'dark' || (themeVal === 'system' && isSystemDark);
+
+            if (isDark) {
+                htmlEl.classList.add('dark');
+                htmlEl.classList.remove('light');
+            } else {
+                htmlEl.classList.remove('dark');
+                htmlEl.classList.add('light');
+            }
+
+            const themeIcon = document.getElementById('theme-icon');
+            if (themeIcon) {
+                themeIcon.className = isDark ? 'fa-solid fa-sun text-amber-400 text-xs' : 'fa-solid fa-moon text-slate-700 dark:text-slate-200 text-xs';
+            }
+
+            const bLight = document.getElementById('theme-btn-light');
+            const bDark = document.getElementById('theme-btn-dark');
+            const bSystem = document.getElementById('theme-btn-system');
+            const activeStyle = "text-white seg-active";
+            const inactiveStyle = "text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400";
+
+            if (bLight) bLight.className = `capsule-toggle-btn text-[11px] px-2.5 py-1 rounded-full font-semibold ${themeVal === 'light' ? activeStyle : inactiveStyle}`;
+            if (bDark) bDark.className = `capsule-toggle-btn text-[11px] px-2.5 py-1 rounded-full font-semibold ${themeVal === 'dark' ? activeStyle : inactiveStyle}`;
+            if (bSystem) bSystem.className = `capsule-toggle-btn text-[11px] px-2.5 py-1 rounded-full font-semibold ${themeVal === 'system' ? activeStyle : inactiveStyle}`;
+
+            requestAnimationFrame(() => updateSegmentedPill('theme-seg-pill', `theme-btn-${themeVal}`, animate));
+            saveLocalStorage();
+        }
+
+        function toggleTheme() {
+            if (appState.theme === 'light') {
+                applyTheme('dark', true);
+            } else if (appState.theme === 'dark') {
+                applyTheme('system', true);
+            } else {
+                applyTheme('light', true);
+            }
+        }
+
+        function applyGlassBlur(val) {
+            appState.glassBlur = parseInt(val, 10);
+            document.documentElement.style.setProperty('--glass-blur', `${appState.glassBlur}px`);
+            const txt = document.getElementById('blur-val-txt');
+            const range = document.getElementById('glass-blur-range');
+            if (txt) txt.innerText = `${appState.glassBlur}px`;
+            if (range) range.value = appState.glassBlur;
+            saveLocalStorage();
+        }
+
+        function onGlassBlurChange(val) {
+            applyGlassBlur(val);
+        }
+
+        function applyGlassOpacity(val) {
+            appState.glassOpacity = parseInt(val, 10);
+            const opacityDec = appState.glassOpacity / 100;
+            document.documentElement.style.setProperty('--glass-opacity-light', opacityDec);
+            document.documentElement.style.setProperty('--glass-opacity-dark', opacityDec * 0.85);
+            const txt = document.getElementById('opacity-val-txt');
+            const range = document.getElementById('glass-opacity-range');
+            if (txt) txt.innerText = `${appState.glassOpacity}%`;
+            if (range) range.value = appState.glassOpacity;
+            saveLocalStorage();
+        }
+
+        function onGlassOpacityChange(val) {
+            applyGlassOpacity(val);
+        }
+
+        function setStyleOption(opt, animate = true) {
+            appState.styleOption = opt;
+            const optCap = document.getElementById('opt-cap');
+            const optLow = document.getElementById('opt-low');
+            const activeStyle = "text-white seg-active";
+            const inactiveStyle = "text-slate-500 dark:text-slate-400";
+
+            if (optCap && optLow) {
+                if (opt === 'capitalize') {
+                    optCap.className = `capsule-toggle-btn text-[11px] px-3 py-1 rounded-full font-semibold ${activeStyle}`;
+                    optLow.className = `capsule-toggle-btn text-[11px] px-3 py-1 rounded-full font-semibold ${inactiveStyle}`;
+                } else {
+                    optCap.className = `capsule-toggle-btn text-[11px] px-3 py-1 rounded-full font-semibold ${inactiveStyle}`;
+                    optLow.className = `capsule-toggle-btn text-[11px] px-3 py-1 rounded-full font-semibold ${activeStyle}`;
+                }
+            }
+            requestAnimationFrame(() => updateSegmentedPill('style-seg-pill', opt === 'capitalize' ? 'opt-cap' : 'opt-low', animate));
+            onInputTextChange(false);
+            saveLocalStorage();
+        }
+
+        function applySpacingSetting(spc, animate = true) {
+            appState.spacingOption = spc;
+            const bSpc = document.getElementById('spc-btn-space');
+            const bHyp = document.getElementById('spc-btn-hyphen');
+            const bJoi = document.getElementById('spc-btn-join');
+
+            const activeStyle = "text-white seg-active";
+            const inactiveStyle = "text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400";
+
+            if (bSpc) bSpc.className = `capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold ${spc === 'space' ? activeStyle : inactiveStyle}`;
+            if (bHyp) bHyp.className = `capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold ${spc === 'hyphen' ? activeStyle : inactiveStyle}`;
+            if (bJoi) bJoi.className = `capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold ${spc === 'join' ? activeStyle : inactiveStyle}`;
+
+            requestAnimationFrame(() => updateSegmentedPill('spc-seg-pill', `spc-btn-${spc}`, animate));
+            onInputTextChange(false);
+            saveLocalStorage();
+        }
+
+        function updateAnimSpeedUI(speed, pillSeconds) {
+            const bFast = document.getElementById('anim-btn-fast');
+            const bNorm = document.getElementById('anim-btn-normal');
+            const bSlow = document.getElementById('anim-btn-slow');
+
+            const activeStyle = "text-white seg-active";
+            const inactiveStyle = "text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400";
+
+            if (bFast) bFast.className = `capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold ${speed === 'fast' ? activeStyle : inactiveStyle}`;
+            if (bNorm) bNorm.className = `capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold ${speed === 'normal' ? activeStyle : inactiveStyle}`;
+            if (bSlow) bSlow.className = `capsule-toggle-btn text-[10px] px-2 py-1 rounded-full font-semibold ${speed === 'slow' ? activeStyle : inactiveStyle}`;
+
+            const slider = document.getElementById('anim-speed-range');
+            const valTxt = document.getElementById('anim-val-txt');
+            if (slider) slider.value = pillSeconds.toFixed(2);
+            if (valTxt) valTxt.innerText = `${pillSeconds.toFixed(2)}s`;
+        }
+
+        function applyAnimationSpeed(speed, animate = true) {
+            appState.animSpeed = speed;
+            let duration = '0.22s';
+            let pillDuration = '0.50s';
+            let pillSecNum = 0.50;
+
+            if (speed === 'fast') {
+                duration = '0.22s';
+                pillDuration = '0.50s';
+                pillSecNum = 0.50;
+            } else if (speed === 'normal') {
+                duration = '0.36s';
+                pillDuration = '0.78s';
+                pillSecNum = 0.78;
+            } else if (speed === 'slow') {
+                duration = '0.58s';
+                pillDuration = '1.05s';
+                pillSecNum = 1.05;
+            } else if (speed === 'custom') {
+                pillSecNum = typeof appState.animCustomSec === 'number' ? appState.animCustomSec : 0.50;
+                pillDuration = `${pillSecNum.toFixed(2)}s`;
+                duration = `${Math.max(0.12, pillSecNum * 0.46).toFixed(2)}s`;
+            }
+
+            appState.animCustomSec = pillSecNum;
+            document.documentElement.style.setProperty('--anim-speed', duration);
+            document.documentElement.style.setProperty('--pixel-pill-speed', pillDuration);
+
+            const visualTab = speed === 'custom'
+                ? (pillSecNum <= 0.62 ? 'fast' : pillSecNum <= 0.92 ? 'normal' : 'slow')
+                : speed;
+
+            updateAnimSpeedUI(visualTab, pillSecNum);
+            requestAnimationFrame(() => updateSegmentedPill('anim-seg-pill', `anim-btn-${visualTab}`, animate));
+            saveLocalStorage();
+        }
+
+        function onAnimSpeedSliderChange(val) {
+            const sec = parseFloat(val);
+            if (isNaN(sec)) return;
+            appState.animCustomSec = sec;
+
+            let closestPreset = 'custom';
+            if (Math.abs(sec - 0.50) <= 0.04) closestPreset = 'fast';
+            else if (Math.abs(sec - 0.78) <= 0.04) closestPreset = 'normal';
+            else if (Math.abs(sec - 1.05) <= 0.04) closestPreset = 'slow';
+
+            appState.animSpeed = closestPreset;
+            const uiDur = `${Math.max(0.12, sec * 0.46).toFixed(2)}s`;
+            const pillDur = `${sec.toFixed(2)}s`;
+
+            document.documentElement.style.setProperty('--anim-speed', uiDur);
+            document.documentElement.style.setProperty('--pixel-pill-speed', pillDur);
+
+            const visualTab = sec <= 0.62 ? 'fast' : sec <= 0.92 ? 'normal' : 'slow';
+            updateAnimSpeedUI(visualTab, sec);
+            requestAnimationFrame(() => updateSegmentedPill('anim-seg-pill', `anim-btn-${visualTab}`, true));
+            saveLocalStorage();
+        }
+
+        function formatPhoneticOutput(rawPhonetic) {
+            let result = rawPhonetic;
+            if (appState.spacingOption === 'hyphen') {
+                result = result.split('\n').map(l => l.replace(/\s+/g, '-')).join('\n');
+            } else if (appState.spacingOption === 'join') {
+                result = result.split('\n').map(l => l.replace(/\s+/g, '')).join('\n');
+            }
+
+            if (appState.styleOption === 'lowercase') {
+                result = result.toLowerCase();
+            } else {
+                result = result.replace(/\b\w/g, l => l.toUpperCase());
+            }
+            return result;
+        }
+
+        function onInputTextChange(scheduleHistory = true) {
+            const input = document.getElementById('input-text');
+            const outputBox = document.getElementById('output-container');
+            const countBox = document.getElementById('char-count');
+            const t = I18N[appState.language] || I18N.lo;
+
+            if (!input || !outputBox) return;
+
+            const val = input.value;
+            if (countBox) countBox.innerText = `${val.length} ${t.charUnit || 'ຕົວອັກສອນ'}`;
+
+            if (!val.trim()) {
+                outputBox.innerHTML = `<span class="text-slate-400 dark:text-slate-500 font-normal text-sm italic" id="output-placeholder">${t.placeholderOutput}</span>`;
+                updateFavButtonState('');
+                return;
+            }
+
+            const result = formatPhoneticOutput(transliterateLaoRules(val));
+            outputBox.innerText = result;
+            updateFavButtonState(val.trim());
+
+            if (scheduleHistory) {
+                clearTimeout(historySaveTimer);
+                historySaveTimer = setTimeout(() => {
+                    addHistoryEntry(val.trim(), result);
+                }, 1200);
+            }
+        }
+
+        /* HISTORY & FAVORITES ENGINE */
+        function addHistoryEntry(laoText, ogaeText) {
+            if (!laoText || !ogaeText) return;
+            if (appState.history.length > 0 && appState.history[0].lao === laoText && appState.history[0].ogae === ogaeText) {
+                return;
+            }
+            appState.history.unshift({
+                id: Date.now().toString(),
+                lao: laoText,
+                ogae: ogaeText,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            if (appState.history.length > 50) {
+                appState.history = appState.history.slice(0, 50);
+            }
+            saveLocalStorage();
+            if (appState.activeTab === 'history') renderHistory();
+        }
+
+        function toggleFavoriteCurrent() {
+            const input = document.getElementById('input-text');
+            const outputBox = document.getElementById('output-container');
+            const t = I18N[appState.language] || I18N.lo;
+            if (!input || !outputBox || !input.value.trim() || outputBox.querySelector('#output-placeholder')) return;
+
+            const laoText = input.value.trim();
+            const ogaeText = outputBox.innerText.trim();
+            const existingIndex = appState.favorites.findIndex(item => item.lao === laoText);
+
+            if (existingIndex >= 0) {
+                appState.favorites.splice(existingIndex, 1);
+                showToast(t.toastFavRemoved);
+            } else {
+                appState.favorites.unshift({
+                    id: Date.now().toString(),
+                    lao: laoText,
+                    ogae: ogaeText
+                });
+                addHistoryEntry(laoText, ogaeText);
+                showToast(t.toastFavAdded);
+            }
+
+            updateFavButtonState(laoText);
+            saveLocalStorage();
+            if (appState.activeTab === 'favorites') renderFavorites();
+        }
+
+        function updateFavButtonState(laoText) {
+            const btnFav = document.getElementById('btn-fav');
+            const iconFav = document.getElementById('btn-fav-icon');
+            if (!btnFav || !iconFav) return;
+
+            const isFav = Boolean(laoText) && appState.favorites.some(item => item.lao === laoText);
+            if (isFav) {
+                btnFav.classList.add('text-amber-500', 'dark:text-amber-400', 'border-amber-400/50');
+                btnFav.classList.remove('text-slate-500', 'dark:text-slate-300');
+                iconFav.className = 'fa-solid fa-star text-xs text-amber-500';
+            } else {
+                btnFav.classList.remove('text-amber-500', 'dark:text-amber-400', 'border-amber-400/50');
+                btnFav.classList.add('text-slate-500', 'dark:text-slate-300');
+                iconFav.className = 'fa-regular fa-star text-xs';
+            }
+        }
+
+        function removeHistoryItem(id) {
+            appState.history = appState.history.filter(item => item.id !== id);
+            saveLocalStorage();
+            renderHistory();
+        }
+
+        function clearHistory() {
+            const t = I18N[appState.language] || I18N.lo;
+            appState.history = [];
+            saveLocalStorage();
+            renderHistory();
+            showToast(t.toastHistoryCleared);
+        }
+
+        function removeFavoriteItem(id) {
+            const t = I18N[appState.language] || I18N.lo;
+            appState.favorites = appState.favorites.filter(item => item.id !== id);
+            saveLocalStorage();
+            renderFavorites();
+            const input = document.getElementById('input-text');
+            if (input) updateFavButtonState(input.value.trim());
+            showToast(t.toastFavRemoved);
+        }
+
+        function loadSavedItem(laoText) {
+            setExample(laoText);
+        }
+
+        function escapeHTML(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            const t = I18N[appState.language] || I18N.lo;
+            if (!list) return;
+
+            if (!appState.history.length) {
+                list.innerHTML = `
+                    <div class="py-10 text-center text-slate-400 dark:text-slate-500 text-xs space-y-2">
+                        <i class="fa-solid fa-clock-rotate-left text-2xl opacity-40"></i>
+                        <p>${t.noHistory}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = appState.history.map(item => `
+                <div class="p-3.5 rounded-2xl liquid-pill flex items-center justify-between gap-3 group hover:border-indigo-500/40 transition-all">
+                    <div class="flex-1 min-w-0 cursor-pointer" onclick="loadSavedItem(${JSON.stringify(item.lao).replace(/"/g, '&quot;')})">
+                        <p class="text-xs text-slate-600 dark:text-slate-300 truncate">${escapeHTML(item.lao)}</p>
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300 truncate mt-0.5">${escapeHTML(item.ogae)}</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <span class="text-[10px] text-slate-400 font-mono hidden sm:inline">${escapeHTML(item.time || '')}</span>
+                        <button onclick="copyStringToClipboard(${JSON.stringify(item.ogae).replace(/"/g, '&quot;')}, '${t.toastCopied}')" class="w-7 h-7 rounded-full hover:bg-indigo-500/15 text-slate-500 hover:text-indigo-600 flex items-center justify-center" title="${t.btnCopy}">
+                            <i class="fa-regular fa-copy text-xs"></i>
+                        </button>
+                        <button onclick="removeHistoryItem('${item.id}')" class="w-7 h-7 rounded-full hover:bg-red-500/15 text-slate-400 hover:text-red-500 flex items-center justify-center" title="${t.btnClear}">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFavorites() {
+            const list = document.getElementById('favorites-list');
+            const t = I18N[appState.language] || I18N.lo;
+            if (!list) return;
+
+            if (!appState.favorites.length) {
+                list.innerHTML = `
+                    <div class="py-10 text-center text-slate-400 dark:text-slate-500 text-xs space-y-2">
+                        <i class="fa-regular fa-star text-2xl opacity-40"></i>
+                        <p>${t.noFav}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = appState.favorites.map(item => `
+                <div class="p-3.5 rounded-2xl liquid-pill flex items-center justify-between gap-3 group hover:border-amber-500/40 transition-all">
+                    <div class="flex-1 min-w-0 cursor-pointer" onclick="loadSavedItem(${JSON.stringify(item.lao).replace(/"/g, '&quot;')})">
+                        <p class="text-xs text-slate-600 dark:text-slate-300 truncate">${escapeHTML(item.lao)}</p>
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300 truncate mt-0.5">${escapeHTML(item.ogae)}</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="copyStringToClipboard(${JSON.stringify(item.ogae).replace(/"/g, '&quot;')}, '${t.toastCopied}')" class="w-7 h-7 rounded-full hover:bg-indigo-500/15 text-slate-500 hover:text-indigo-600 flex items-center justify-center" title="${t.btnCopy}">
+                            <i class="fa-regular fa-copy text-xs"></i>
+                        </button>
+                        <button onclick="removeFavoriteItem('${item.id}')" class="w-7 h-7 rounded-full hover:bg-amber-500/15 text-amber-500 flex items-center justify-center" title="Remove">
+                            <i class="fa-solid fa-star text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setExample(text) {
+            const input = document.getElementById('input-text');
+            if (input) {
+                input.value = text;
+                onInputTextChange(true);
+                switchTab('translator', true);
+            }
+        }
+
+        function clearInput() {
+            const input = document.getElementById('input-text');
+            if (input) {
+                input.value = '';
+                onInputTextChange(false);
+                showToast(I18N[appState.language]?.toastCleared || "ລຶບຂໍ້ຄວາມແລ້ວ!");
+            }
+        }
+
+        function pasteInput() {
+            if (navigator.clipboard && navigator.clipboard.readText) {
+                navigator.clipboard.readText().then(text => {
+                    const input = document.getElementById('input-text');
+                    if (input && text) {
+                        input.value = text;
+                        onInputTextChange(true);
+                    }
+                }).catch(() => {
+                    showToast(I18N[appState.language]?.toastPasteFallback || "ກະລຸນາກົດຄ້າງເພື່ອວາງຂໍ້ຄວາມ");
+                });
+            } else {
+                showToast(I18N[appState.language]?.toastPasteFallback || "ກະລຸນາກົດຄ້າງເພື່ອວາງຂໍ້ຄວາມ");
+            }
+        }
+
+        function copyStringToClipboard(text, toastMessage) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(toastMessage);
+                }).catch(() => {
+                    fallbackCopy(text, toastMessage);
+                });
+            } else {
+                fallbackCopy(text, toastMessage);
+            }
+        }
+
+        function fallbackCopy(text, toastMessage) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(toastMessage);
+        }
+
+        function copyOutput() {
+            const input = document.getElementById('input-text');
+            const outputBox = document.getElementById('output-container');
+            if (outputBox && outputBox.innerText && !outputBox.querySelector('#output-placeholder')) {
+                const text = outputBox.innerText;
+                if (input && input.value.trim()) {
+                    addHistoryEntry(input.value.trim(), text.trim());
+                }
+                copyStringToClipboard(text, I18N[appState.language]?.toastCopied || "ຄັດລອກຂໍ້ຄວາມແລ້ວ!");
+            }
+        }
+
+        function copyDonateAccount() {
+            copyStringToClipboard('0451251538943', I18N[appState.language]?.toastCopiedAcc || "ຄັດລອກເລກບັນຊີແລ້ວ!");
+        }
+
+        function speakText(type) {
+            let text = '';
+            let lang = 'lo-LA';
+            if (type === 'input') {
+                const input = document.getElementById('input-text');
+                if (input) text = input.value.trim();
+                lang = 'lo-LA';
+            } else if (type === 'output') {
+                const outputBox = document.getElementById('output-container');
+                if (outputBox && !outputBox.querySelector('#output-placeholder')) {
+                    text = outputBox.innerText.trim();
+                }
+                lang = 'en-US';
+            }
+            if (text && window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = lang;
+                window.speechSynthesis.speak(utter);
+            }
+        }
+
+        function loadLocalStorage() {
+            try {
+                const savedState = localStorage.getItem('lao_ogae_app_state');
+                if (savedState) {
+                    const parsed = JSON.parse(savedState);
+                    if (parsed && typeof parsed === 'object') {
+                        appState.theme = parsed.theme || 'system';
+                        appState.glassBlur = typeof parsed.glassBlur === 'number' ? parsed.glassBlur : 3;
+                        appState.glassOpacity = typeof parsed.glassOpacity === 'number' ? parsed.glassOpacity : 25;
+                        appState.animSpeed = parsed.animSpeed || 'fast';
+                        appState.animCustomSec = typeof parsed.animCustomSec === 'number' ? parsed.animCustomSec : 0.50;
+                        appState.language = parsed.language || 'lo';
+                        appState.styleOption = parsed.styleOption || 'capitalize';
+                        appState.spacingOption = parsed.spacingOption || 'space';
+                        appState.history = Array.isArray(parsed.history) ? parsed.history : [];
+                        appState.favorites = Array.isArray(parsed.favorites) ? parsed.favorites : [];
+                    }
+                }
+
+                const savedDevDraft = localStorage.getItem('lao_ogae_dev_draft');
+                if (savedDevDraft) {
+                    devState.draftHTML = savedDevDraft;
+                }
+            } catch (e) {
+                console.warn('LocalStorage load error:', e);
+            }
+        }
+
+        function saveLocalStorage() {
+            try {
+                localStorage.setItem('lao_ogae_app_state', JSON.stringify({
+                    theme: appState.theme,
+                    glassBlur: appState.glassBlur,
+                    glassOpacity: appState.glassOpacity,
+                    animSpeed: appState.animSpeed,
+                    animCustomSec: appState.animCustomSec,
+                    language: appState.language,
+                    styleOption: appState.styleOption,
+                    spacingOption: appState.spacingOption,
+                    history: appState.history,
+                    favorites: appState.favorites
+                }));
+            } catch (e) {
+                console.warn('LocalStorage save error:', e);
+            }
+        }
+
+        function openLangModal() {
+            const modal = document.getElementById('lang-modal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeLangModal() {
+            const modal = document.getElementById('lang-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function selectLanguageOption(code) {
+            changeLanguage(code);
+            closeLangModal();
+        }
+
+        function renderLangModalOptions() {
+            const container = document.getElementById('lang-option-list');
+            if (!container) return;
+
+            container.innerHTML = LANGUAGES.map(lang => {
+                const isSelected = lang.code === appState.language;
+                return `
+                    <button onclick="selectLanguageOption('${lang.code}')" class="w-full flex items-center justify-between p-3 rounded-2xl ${isSelected ? 'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-500/25' : 'liquid-pill text-slate-800 dark:text-slate-200 hover:border-indigo-500/40'} transition-all text-xs">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-base">${lang.flag}</span>
+                            <span>${lang.name}</span>
+                        </div>
+                        ${isSelected ? '<i class="fa-solid fa-circle-check text-white text-sm"></i>' : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function changeLanguage(langKey) {
+            appState.language = langKey;
+            saveLocalStorage();
+            updateUIStrings();
+            renderLangModalOptions();
+            renderHistory();
+            renderFavorites();
+            updateNavPillPosition(appState.activeTab, false);
+        }
+
+        function updateUIStrings() {
+            const t = I18N[appState.language] || I18N.lo;
+
+            document.documentElement.lang = appState.language;
+
+            const currLangObj = LANGUAGES.find(l => l.code === appState.language) || LANGUAGES[0];
+            const flagEl = document.getElementById('current-lang-flag');
+            const nameEl = document.getElementById('current-lang-name');
+            if (flagEl) flagEl.innerText = currLangObj.flag;
+            if (nameEl) nameEl.innerText = currLangObj.name;
+
+            const safeSetText = (id, txt) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = txt;
+            };
+
+            safeSetText('ui-subtitle', t.subtitle);
+            safeSetText('lbl-input-lang', t.inputLang);
+            safeSetText('lbl-output-lang', t.outputLang);
+            
+            const inputEl = document.getElementById('input-text');
+            if (inputEl) inputEl.placeholder = t.placeholderInput;
+
+            safeSetText('btn-paste', t.btnPaste);
+            safeSetText('btn-clear', t.btnClear);
+            safeSetText('lbl-fav', t.btnFav);
+            safeSetText('btn-copy', t.btnCopy);
+            safeSetText('lbl-examples', t.examples);
+            
+            safeSetText('tab-title-translator', t.navTranslator);
+            safeSetText('tab-title-history', t.historyTitle);
+            safeSetText('tab-title-favorites', t.navFav || t.favTitle);
+            safeSetText('tab-title-guide', t.guideTitle);
+
+            safeSetText('lbl-page-history-title', t.historyTitle);
+            safeSetText('lbl-page-fav-title', t.favTitle);
+            safeSetText('lbl-page-guide-title', t.guideTitle);
+
+            const setBackBtnText = (id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const span = el.querySelector('span');
+                    if (span) span.innerText = t.btnBackTrans;
+                }
+            };
+            setBackBtnText('btn-back-trans-1');
+            setBackBtnText('btn-back-trans-2');
+            setBackBtnText('btn-back-trans-3');
+            
+            safeSetText('lbl-history-desc', t.historyDesc);
+            safeSetText('lbl-fav-desc', t.favDesc);
+            safeSetText('btn-clear-history', t.clearHistory);
+            safeSetText('lbl-guide-heading', t.guideHeading);
+            safeSetText('alert-banner-txt', t.alertBannerText);
+
+            const titleSettings = document.getElementById('modal-title-settings');
+            if (titleSettings) titleSettings.innerHTML = `<i class="fa-solid fa-gear text-indigo-500"></i> ${t.modalTitle}`;
+
+            const titleLang = document.getElementById('modal-lang-title');
+            if (titleLang) titleLang.innerHTML = `<i class="fa-solid fa-globe text-indigo-500"></i> ${t.modalLangTitle}`;
+
+            safeSetText('setting-theme-lbl', t.themeLbl);
+            safeSetText('setting-theme-desc', t.themeDesc);
+            safeSetText('setting-anim-lbl', t.animLbl || 'ຄວາມໄວແອນິເມຊັນ (Animation)');
+            safeSetText('setting-anim-desc', t.animDesc || 'ປັບປ່ຽນຄວາມໄວແອັບຕາມໃຈຊອບ');
+            safeSetText('setting-blur-lbl', t.blurLbl);
+            safeSetText('setting-blur-desc', t.blurDesc);
+            safeSetText('setting-opacity-lbl', t.opacityLbl);
+            safeSetText('setting-opacity-desc', t.opacityDesc);
+            safeSetText('setting-space-lbl', t.spaceLbl);
+            safeSetText('setting-space-desc', t.spaceDesc);
+            
+            const titlePrivacy = document.getElementById('lbl-privacy-title');
+            if (titlePrivacy) titlePrivacy.innerHTML = `<i class="fa-solid fa-shield-halved"></i> ${t.privacyTitle}`;
+            safeSetText('lbl-privacy-desc', t.privacyDesc);
+
+            const titleContact = document.getElementById('lbl-contact-title');
+            if (titleContact) titleContact.innerHTML = `<i class="fa-solid fa-headset"></i> ${t.contactTitle}`;
+            safeSetText('lbl-address-title', t.addressTitle);
+            safeSetText('lbl-address-desc', t.addressDesc);
+            
+            const titleDonate = document.getElementById('lbl-donate-title');
+            if (titleDonate) titleDonate.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> ${t.donateTitle}`;
+            safeSetText('lbl-donate-bank', t.donateBank);
+            safeSetText('lbl-donate-name-title', t.donateNameTitle);
+            safeSetText('lbl-donate-acc-title', t.donateAccTitle);
+            safeSetText('btn-copy-acc', t.btnCopyAcc);
+
+            safeSetText('lbl-app-version', t.appVersion);
+            safeSetText('lbl-app-updated', t.appUpdated);
+            safeSetText('btn-modal-ok', t.btnOk);
+
+            applySpacingSetting(appState.spacingOption, false);
+            setStyleOption(appState.styleOption, false);
+            onInputTextChange(false);
+        }
+
+        function openSettings() {
+            const modal = document.getElementById('settings-modal');
+            if (modal) {
+                modal.classList.add('active');
+                applyTheme(appState.theme, false);
+                applyGlassBlur(appState.glassBlur);
+                applyGlassOpacity(appState.glassOpacity);
+                applyAnimationSpeed(appState.animSpeed, false);
+                applySpacingSetting(appState.spacingOption, false);
+                requestAnimationFrame(() => syncAllSegmentedPills(false));
+            }
+        }
+
+        function closeSettings() {
+            const modal = document.getElementById('settings-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        /* =========================================================
+           DEVELOPER MODE SANDBOX & INSPECTOR ENGINE
+           ========================================================= */
+        function getCleanDocumentHTML() {
+            const clone = document.documentElement.cloneNode(true);
+            const settingsModal = clone.querySelector('#settings-modal');
+            if (settingsModal) settingsModal.classList.remove('active');
+            const langModal = clone.querySelector('#lang-modal');
+            if (langModal) langModal.classList.remove('active');
+            const devModal = clone.querySelector('#dev-mode-modal');
+            if (devModal) devModal.classList.add('hidden');
+            const injected = clone.querySelector('#dev-sandbox-inspector-script');
+            if (injected) injected.remove();
+            return '<!DOCTYPE html>\n' + clone.outerHTML;
+        }
+
+        function openDevMode() {
+            closeSettings();
+            const devModal = document.getElementById('dev-mode-modal');
+            if (devModal) {
+                devModal.classList.remove('hidden');
+                if (!devState.draftHTML) {
+                    devState.draftHTML = getCleanDocumentHTML();
+                }
+                document.getElementById('range-dev-blur').value = appState.glassBlur;
+                document.getElementById('val-dev-blur').innerText = `${appState.glassBlur}px`;
+                document.getElementById('range-dev-opacity').value = appState.glassOpacity;
+                document.getElementById('val-dev-opacity').innerText = `${appState.glassOpacity}%`;
+                document.getElementById('dev-perf-toggle').checked = appState.glassBlur === 0;
+
+                switchDevCodeFile('html');
+                refreshDevPreview();
+                updateDevDiagnosticInfo();
+                logDevConsole('Developer Mode opened successfully.', 'info');
+            }
+        }
+
+        function closeDevMode() {
+            const devModal = document.getElementById('dev-mode-modal');
+            if (devModal) devModal.classList.add('hidden');
+        }
+
+        function switchDevTab(tabId) {
+            devState.activeSubTab = tabId;
+            const tabs = ['visual', 'code', 'settings', 'inspector'];
+            
+            tabs.forEach(t => {
+                const subEl = document.getElementById(`dev-sub-${t}`);
+                const btnEl = document.getElementById(`dev-tab-${t}`);
+                if (subEl && btnEl) {
+                    if (t === tabId) {
+                        subEl.classList.remove('hidden');
+                        btnEl.className = "py-2 rounded-lg bg-indigo-600 text-white text-center font-bold flex flex-col items-center gap-1";
+                    } else {
+                        subEl.classList.add('hidden');
+                        btnEl.className = "py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 text-center font-bold flex flex-col items-center gap-1";
+                    }
+                }
+            });
+            if (tabId === 'code') {
+                switchDevCodeFile(devState.currentFile);
+            } else if (tabId === 'inspector') {
+                updateDevDiagnosticInfo();
+            }
+        }
+
+        function switchDevCodeFile(fileType) {
+            commitCodeEditorToDraft();
+            devState.currentFile = fileType;
+
+            ['html', 'css', 'js', 'config'].forEach(f => {
+                const btn = document.getElementById(`code-file-${f}`);
+                if (btn) {
+                    btn.className = f === fileType
+                        ? "px-2.5 py-1 rounded bg-indigo-600 text-white font-mono font-bold"
+                        : "px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono hover:bg-slate-700";
+                }
+            });
+
+            const codeEditor = document.getElementById('dev-code-editor');
+            const statusEl = document.getElementById('dev-code-status');
+            if (!codeEditor) return;
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(devState.draftHTML, 'text/html');
+
+            if (fileType === 'html') {
+                codeEditor.value = devState.draftHTML;
+                if (statusEl) statusEl.innerText = 'Editing Full HTML Document';
+            } else if (fileType === 'css') {
+                const styleTag = doc.querySelector('head style');
+                codeEditor.value = styleTag ? styleTag.textContent.trim() : '';
+                if (statusEl) statusEl.innerText = 'Editing Embedded CSS (<style>)';
+            } else if (fileType === 'js') {
+                const scriptTag = doc.querySelector('#main-app-script') || doc.body.querySelector('script');
+                codeEditor.value = scriptTag ? scriptTag.textContent.trim() : '';
+                if (statusEl) statusEl.innerText = 'Editing Main JavaScript';
+            } else if (fileType === 'config') {
+                codeEditor.value = JSON.stringify(appState, null, 2);
+                if (statusEl) statusEl.innerText = 'Editing App State Config (JSON)';
+            }
+
+            updateCodeLineNumbers();
+        }
+
+        function commitCodeEditorToDraft() {
+            const codeEditor = document.getElementById('dev-code-editor');
+            if (!codeEditor || !codeEditor.value.trim()) return;
+
+            if (devState.currentFile === 'html') {
+                devState.draftHTML = codeEditor.value;
+            } else if (devState.currentFile === 'css') {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(devState.draftHTML, 'text/html');
+                const styleTag = doc.querySelector('head style');
+                if (styleTag) {
+                    styleTag.textContent = '\n' + codeEditor.value + '\n';
+                    devState.draftHTML = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+                }
+            } else if (devState.currentFile === 'js') {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(devState.draftHTML, 'text/html');
+                const scriptTag = doc.querySelector('#main-app-script') || doc.body.querySelector('script');
+                if (scriptTag) {
+                    scriptTag.textContent = '\n' + codeEditor.value + '\n';
+                    devState.draftHTML = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+                }
+            } else if (devState.currentFile === 'config') {
+                try {
+                    const parsedCfg = JSON.parse(codeEditor.value);
+                    Object.assign(appState, parsedCfg);
+                    saveLocalStorage();
+                } catch (e) {
+                    logDevConsole('Invalid JSON in Config tab: ' + e.message, 'error');
+                }
+            }
+        }
+
+        function onDevCodeInput() {
+            updateCodeLineNumbers();
+        }
+
+        function updateCodeLineNumbers() {
+            const codeEditor = document.getElementById('dev-code-editor');
+            const lineBox = document.getElementById('dev-line-numbers');
+            if (codeEditor && lineBox) {
+                const lines = codeEditor.value.split('\n').length;
+                let numHtml = '';
+                for (let i = 1; i <= Math.min(lines, 2500); i++) {
+                    numHtml += i + '<br>';
+                }
+                lineBox.innerHTML = numHtml;
+            }
+        }
+
+        function searchInCode(query) {
+            const codeEditor = document.getElementById('dev-code-editor');
+            const statusEl = document.getElementById('dev-code-status');
+            if (!codeEditor) return;
+            const q = query.trim();
+            if (!q) {
+                if (statusEl) statusEl.innerText = 'Source Ready';
+                return;
+            }
+            const text = codeEditor.value;
+            const lowerText = text.toLowerCase();
+            const lowerQ = q.toLowerCase();
+            const idx = lowerText.indexOf(lowerQ);
+
+            let count = 0;
+            let pos = 0;
+            while ((pos = lowerText.indexOf(lowerQ, pos)) !== -1) {
+                count++;
+                pos += lowerQ.length;
+            }
+
+            if (idx !== -1) {
+                codeEditor.focus();
+                codeEditor.setSelectionRange(idx, idx + q.length);
+                const lineNum = text.slice(0, idx).split('\n').length;
+                codeEditor.scrollTop = Math.max(0, (lineNum - 5) * 18);
+                if (statusEl) statusEl.innerText = `Found ${count} match(es) • Line ${lineNum}`;
+            } else {
+                if (statusEl) statusEl.innerText = 'No matches found';
+            }
+        }
+
+        function copyCurrentCode() {
+            const codeEditor = document.getElementById('dev-code-editor');
+            if (codeEditor) {
+                copyStringToClipboard(codeEditor.value, 'ຄັດລອກຊອດໂຄດແລ້ວ!');
+                logDevConsole(`Copied ${devState.currentFile.toUpperCase()} source to clipboard.`, 'info');
+            }
+        }
+
+        function refreshDevPreview() {
+            const iframe = document.getElementById('dev-sandbox-iframe');
+            if (!iframe) return;
+
+            commitCodeEditorToDraft();
+
+            const inspectorBridge = `
+<script id="dev-sandbox-inspector-script">
+(function() {
+    let hoveredEl = null;
+    let selectedEl = null;
+    function getUniqueSelector(el) {
+        if (!el || el === document.documentElement) return 'html';
+        if (el === document.body) return 'body';
+        if (el.id) return '#' + el.id;
+        let path = [];
+        while (el && el.nodeType === 1 && el !== document.body) {
+            let sel = el.tagName.toLowerCase();
+            if (el.id) {
+                sel = '#' + el.id;
+                path.unshift(sel);
+                break;
+            } else {
+                let sib = el, nth = 1;
+                while (sib = sib.previousElementSibling) {
+                    if (sib.tagName === el.tagName) nth++;
+                }
+                if (nth > 1) sel += ':nth-of-type(' + nth + ')';
+            }
+            path.unshift(sel);
+            el = el.parentElement;
+        }
+        return path.join(' > ');
+    }
+    document.addEventListener('mouseover', function(e) {
+        if (hoveredEl && hoveredEl !== selectedEl) {
+            hoveredEl.style.outline = hoveredEl.dataset.prevOutline || '';
+        }
+        hoveredEl = e.target;
+        if (hoveredEl && hoveredEl !== selectedEl) {
+            hoveredEl.dataset.prevOutline = hoveredEl.style.outline || '';
+            hoveredEl.style.outline = '1.5px dashed rgba(99, 102, 241, 0.75)';
+        }
+    }, true);
+    document.addEventListener('mouseout', function() {
+        if (hoveredEl && hoveredEl !== selectedEl) {
+            hoveredEl.style.outline = hoveredEl.dataset.prevOutline || '';
+        }
+    }, true);
+    document.addEventListener('click', function(e) {
+        if (window.__DEV_INSPECT_ACTIVE__) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (selectedEl) {
+                selectedEl.style.outline = selectedEl.dataset.prevOutline || '';
+            }
+            selectedEl = e.target;
+            selectedEl.dataset.prevOutline = '';
+            selectedEl.style.outline = '2px solid #6366f1';
+            const cs = window.getComputedStyle(selectedEl);
+            const hasOnlyText = selectedEl.children.length === 0;
+            window.parent.postMessage({
+                type: 'DEV_SELECT_ELEMENT',
+                selector: getUniqueSelector(selectedEl),
+                tagName: selectedEl.tagName.toLowerCase(),
+                styles: {
+                    width: selectedEl.style.width || '',
+                    height: selectedEl.style.height || '',
+                    padding: selectedEl.style.padding || cs.padding,
+                    margin: selectedEl.style.margin || cs.margin,
+                    color: cs.color,
+                    backgroundColor: cs.backgroundColor,
+                    fontSize: parseInt(cs.fontSize, 10) || '',
+                    borderRadius: parseInt(cs.borderRadius, 10) || 0,
+                    display: selectedEl.style.display || ''
+                },
+                innerText: hasOnlyText ? selectedEl.innerText : ''
+            }, '*');
+        }
+    }, true);
+    window.__DEV_INSPECT_ACTIVE__ = true;
+})();
+<\/script>`;
+
+            const previewHTML = devState.draftHTML.replace('</body>', inspectorBridge + '\n</body>');
+
+            if (devState.currentBlobUrl) {
+                URL.revokeObjectURL(devState.currentBlobUrl);
+            }
+            const blob = new Blob([previewHTML], { type: 'text/html' });
+            devState.currentBlobUrl = URL.createObjectURL(blob);
+            iframe.src = devState.currentBlobUrl;
+            updateDevDiagnosticInfo();
+        }
+
+        function rgbToHex(rgb) {
+            if (!rgb) return '#000000';
+            if (rgb.startsWith('#')) return rgb.slice(0, 7);
+            const match = rgb.match(/\d+/g);
+            if (!match || match.length < 3) return '#000000';
+            const r = parseInt(match[0], 10).toString(16).padStart(2, '0');
+            const g = parseInt(match[1], 10).toString(16).padStart(2, '0');
+            const b = parseInt(match[2], 10).toString(16).padStart(2, '0');
+            return `#${r}${g}${b}`;
+        }
+
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'DEV_SELECT_ELEMENT') {
+                const { selector, tagName, styles, innerText } = event.data;
+                devState.selectedSelector = selector;
+
+                const targetInput = document.getElementById('dev-vis-target');
+                if (targetInput) targetInput.value = selector;
+
+                document.getElementById('dev-vis-width').value = styles.width || '';
+                document.getElementById('dev-vis-height').value = styles.height || '';
+                document.getElementById('dev-vis-padding').value = styles.padding || '';
+                document.getElementById('dev-vis-margin').value = styles.margin || '';
+                document.getElementById('dev-vis-color').value = styles.color || '';
+                document.getElementById('dev-vis-color-picker').value = rgbToHex(styles.color);
+                document.getElementById('dev-vis-bg').value = styles.backgroundColor || '';
+                document.getElementById('dev-vis-bg-picker').value = rgbToHex(styles.backgroundColor);
+                document.getElementById('dev-vis-fontsize').value = styles.fontSize || '';
+                document.getElementById('dev-vis-radius').value = styles.borderRadius ?? '';
+                document.getElementById('dev-vis-display').value = styles.display || '';
+                document.getElementById('dev-vis-text').value = innerText || '';
+
+                const badge = document.getElementById('sandbox-selected-badge');
+                if (badge) badge.innerText = `Selected: <${tagName}> (${selector})`;
+
+                logDevConsole(`Inspected element: ${selector}`, 'info');
+            }
+        });
+
+        function applyVisualProperty(prop, val) {
+            const iframe = document.getElementById('dev-sandbox-iframe');
+            const selector = devState.selectedSelector || 'body';
+            try {
+                const doc = iframe?.contentDocument;
+                if (doc) {
+                    const el = doc.querySelector(selector);
+                    if (el) {
+                        el.style[prop] = val;
+                        syncSandboxDomToDraft(doc);
+                    }
+                }
+            } catch (e) {
+                logDevConsole('Visual property error: ' + e.message, 'error');
+            }
+        }
+
+        function applyVisualText(val) {
+            const iframe = document.getElementById('dev-sandbox-iframe');
+            const selector = devState.selectedSelector || 'body';
+            try {
+                const doc = iframe?.contentDocument;
+                if (doc) {
+                    const el = doc.querySelector(selector);
+                    if (el && el.children.length === 0) {
+                        el.innerText = val;
+                        syncSandboxDomToDraft(doc);
+                    }
+                }
+            } catch (e) {
+                logDevConsole('Visual text error: ' + e.message, 'error');
+            }
+        }
+
+        function syncSandboxDomToDraft(sandboxDoc) {
+            const clone = sandboxDoc.documentElement.cloneNode(true);
+            const injected = clone.querySelector('#dev-sandbox-inspector-script');
+            if (injected) injected.remove();
+            clone.querySelectorAll('[style*="outline"]').forEach(node => {
+                node.style.outline = '';
+                delete node.dataset.prevOutline;
+            });
+            devState.draftHTML = '<!DOCTYPE html>\n' + clone.outerHTML;
+            if (devState.currentFile === 'html') {
+                const codeEditor = document.getElementById('dev-code-editor');
+                if (codeEditor) {
+                    codeEditor.value = devState.draftHTML;
+                    updateCodeLineNumbers();
+                }
+            }
+        }
+
+        function saveDevDraft() {
+            commitCodeEditorToDraft();
+            try {
+                localStorage.setItem('lao_ogae_dev_draft', devState.draftHTML);
+                updateDevDiagnosticInfo();
+                logDevConsole('Sandbox draft saved to localStorage.', 'info');
+                showToast("ບັນທຶກ Sandbox Draft ລົງ LocalStorage ແລ້ວ!");
+            } catch (e) {
+                logDevConsole('Failed to save draft: ' + e.message, 'error');
+            }
+        }
+
+        function applyDevDraft() {
+            saveDevDraft();
+            refreshDevPreview();
+            showToast("ນໍາໃຊ້ Draft ໃນ Live View ແລ້ວ!");
+        }
+
+        function resetDevDraft() {
+            localStorage.removeItem('lao_ogae_dev_draft');
+            devState.draftHTML = getCleanDocumentHTML();
+            devState.selectedSelector = 'body';
+            document.getElementById('dev-vis-target').value = 'body';
+            switchDevCodeFile(devState.currentFile);
+            refreshDevPreview();
+            updateDevDiagnosticInfo();
+            logDevConsole('All Sandbox drafts reset to clean state.', 'warn');
+            showToast("ລຶບ Draft ທັງໝົດ ແລະ ຣີເຊັດແລ້ວ!");
+        }
+
+        function exportDevHTML() {
+            saveDevDraft();
+            const blob = new Blob([devState.draftHTML], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Logao_Laos-oke_Dev_Export.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            logDevConsole('Exported clean HTML bundle.', 'info');
+            showToast("ສົ່ງອອກໄຟລ໌ HTML ສຳເລັດ!");
+        }
+
+        function tweakParam(param, val) {
+            const iframeDoc = document.getElementById('dev-sandbox-iframe')?.contentDocument;
+            if (param === 'scale') {
+                devState.uiScale = val;
+                document.getElementById('val-ui-scale').innerText = `${val}%`;
+                document.documentElement.style.setProperty('--ui-scale', val / 100);
+                if (iframeDoc) iframeDoc.documentElement.style.setProperty('--ui-scale', val / 100);
+            } else if (param === 'anim') {
+                document.getElementById('val-anim-speed').innerText = `${val / 10}s`;
+                document.documentElement.style.setProperty('--anim-speed', `${val / 10}s`);
+                if (iframeDoc) iframeDoc.documentElement.style.setProperty('--anim-speed', `${val / 10}s`);
+            } else if (param === 'blur') {
+                document.getElementById('val-dev-blur').innerText = `${val}px`;
+                applyGlassBlur(val);
+                if (iframeDoc) iframeDoc.documentElement.style.setProperty('--glass-blur', `${val}px`);
+            } else if (param === 'opacity') {
+                document.getElementById('val-dev-opacity').innerText = `${val}%`;
+                applyGlassOpacity(val);
+                if (iframeDoc) {
+                    iframeDoc.documentElement.style.setProperty('--glass-opacity-light', val / 100);
+                    iframeDoc.documentElement.style.setProperty('--glass-opacity-dark', (val / 100) * 0.85);
+                }
+            } else if (param === 'radius') {
+                devState.cardRadius = val;
+                document.getElementById('val-dev-radius').innerText = `${val}px`;
+                document.documentElement.style.setProperty('--card-radius', `${val}px`);
+                if (iframeDoc) iframeDoc.documentElement.style.setProperty('--card-radius', `${val}px`);
+            }
+        }
+
+        function togglePerfMode(checked) {
+            const blurVal = checked ? 0 : 3;
+            document.getElementById('range-dev-blur').value = blurVal;
+            tweakParam('blur', blurVal);
+            logDevConsole(`Performance Mode ${checked ? 'Enabled (Blur 0px)' : 'Disabled (Blur 3px)'}`, 'info');
+        }
+
+        function setSandboxViewport(mode) {
+            const iframe = document.getElementById('dev-sandbox-iframe');
+            const btnPc = document.getElementById('btn-vp-desktop');
+            const btnMobile = document.getElementById('btn-vp-mobile');
+            if (!iframe) return;
+
+            if (mode === 'mobile') {
+                iframe.style.width = '390px';
+                iframe.style.maxWidth = '100%';
+                iframe.style.height = '100%';
+                if (btnMobile) btnMobile.className = 'px-2 py-0.5 rounded bg-indigo-600 text-white font-mono text-[11px]';
+                if (btnPc) btnPc.className = 'px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px]';
+            } else {
+                iframe.style.width = '100%';
+                iframe.style.maxWidth = 'none';
+                iframe.style.height = '100%';
+                if (btnPc) btnPc.className = 'px-2 py-0.5 rounded bg-indigo-600 text-white font-mono text-[11px]';
+                if (btnMobile) btnMobile.className = 'px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px]';
+            }
+            logDevConsole(`Viewport switched to ${mode.toUpperCase()}.`, 'info');
+        }
+
+        function logDevConsole(msg, level = 'info') {
+            const box = document.getElementById('dev-console-box');
+            if (!box) return;
+            const time = new Date().toLocaleTimeString([], { hour12: false });
+            const colorClass = level === 'error' ? 'text-red-400' : level === 'warn' ? 'text-amber-400' : 'text-emerald-400';
+            const line = document.createElement('div');
+            line.className = colorClass;
+            line.textContent = `[${time}] ${msg}`;
+            box.appendChild(line);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function clearConsoleLogs() {
+            const box = document.getElementById('dev-console-box');
+            if (box) {
+                box.innerHTML = '<div class="text-slate-500">[System] Console cleared.</div>';
+            }
+        }
+
+        function updateDevDiagnosticInfo() {
+            const resEl = document.getElementById('dev-info-res');
+            const agentEl = document.getElementById('dev-info-agent');
+            const storageEl = document.getElementById('dev-info-storage');
+
+            if (resEl) resEl.innerText = `${window.innerWidth}x${window.innerHeight}`;
+            if (agentEl) agentEl.innerText = navigator.platform || navigator.userAgent.split(' ')[0];
+            if (storageEl) {
+                const draft = localStorage.getItem('lao_ogae_dev_draft') || devState.draftHTML || '';
+                const kb = (new Blob([draft]).size / 1024).toFixed(1);
+                storageEl.innerText = `${kb} KB`;
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (toast && toastMsg) {
+                toastMsg.innerText = message;
+                toast.classList.remove('opacity-0', 'pointer-events-none');
+                toast.classList.add('opacity-100');
+
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                }, 2500);
+            }
+        }
+    </script>
+</body>
+</html>
